@@ -11,17 +11,13 @@ import { Ionicons } from "@expo/vector-icons";
 import { ClienteViews } from "../views/cliente/ClienteViews";
 import { AprovisionamientoViews } from "../views/aprovisionamiento/AprovisionamientoViews";
 import { ImagenesViews } from "../views/imagenes/ImagenesViews";
-import tw from "twrnc";
 import { FinalizacionView } from "../views/finalizacion/FinalizacionView";
-import Storage from "../../libs/storage";
-import { coreApi } from "../../api/CoreApi";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { fetchIdOrden } from "../../store/Ordenes/Thunks";
-import { SelectorInterface } from "../../interfaces/SelectorInterfaces";
-import { toggleCargandoParam } from "../../store/splash/splashSlice";
-import { ScrollView } from "react-native";
-import { Splash } from "../../helpers/Splash";
+
+import { fetchNap_box } from "../../store/cajaNap/Thunks";
+import { fetchIdContratoId } from "../../store/contrato/Thunks";
 
 const Tab = createBottomTabNavigator();
 
@@ -52,9 +48,13 @@ const BottomTabBar = ({ navigation, state }: any) => (
 
 export const CoreRouters = ({ route }: Props) => {
   const id = route.params ? route.params?.id : 0;
+  const nap_box = route.params ? route.params?.nap_box : 0;
+  const contractID = route.params ? route.params?.contract : 0;
   const dispatch = useDispatch<any>();
   const getCliente = (idOrden: any) => {
     dispatch(fetchIdOrden(idOrden));
+    dispatch(fetchNap_box(nap_box));
+    dispatch(fetchIdContratoId(contractID));
   };
 
   useEffect(() => {

@@ -3,9 +3,11 @@ import { coreApi } from "../../api/CoreApi";
 import { initialStateOrden } from "./OrdenSlices";
 import { initialStateOrdenId } from "./OrdenIdSlices";
 
-export const fetchOrdenes = createAsyncThunk("orden", async () => {
+export const fetchOrdenes = createAsyncThunk("orden", async (params?: any) => {
   return coreApi
-    .get("/api/gsoft/installations/orders/")
+    .get("/api/gsoft/installations/orders/", {
+      params,
+    })
     .then(({ data, status }) => {
       if (status == 200) {
         return data;

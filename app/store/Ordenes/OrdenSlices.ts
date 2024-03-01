@@ -25,7 +25,7 @@ export const ordenSlice = createSlice({
          state.ordenes=payload.results
         // state.count=payload.count
         
-    });
+    })
   },
 });
 

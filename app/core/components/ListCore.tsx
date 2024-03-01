@@ -31,7 +31,7 @@ export const ListCore = () => {
     }, 2000);
   }, []);
 
-  const renderItemAccessory = ({ id }: any): React.ReactElement => {
+  const renderItemAccessory = ({ id,nap_box,contract }: any): React.ReactElement => {
     return (
       <Button
         size="tiny"
@@ -41,6 +41,8 @@ export const ListCore = () => {
         onPress={() =>
           navigation.navigate("client", {
             id,
+            nap_box,
+            contract
           })
         }
       >

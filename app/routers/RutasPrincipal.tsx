@@ -14,6 +14,7 @@ import Storage from "../libs/storage";
 import { useDispatch } from "react-redux";
 import { mostrarCargando, ocultarCargando } from "../store/splash/splashSlice";
 import { coreApi } from "../api/CoreApi";
+import { MapsScreen } from "../core/screen/MapsScreen";
 const principal = createStackNavigator();
 
 export const RutasPrincipal = () => {
@@ -153,6 +154,9 @@ export const RutasPrincipal = () => {
             headerShadowVisible: false,
           }}
         />
+        <principal.Group screenOptions={{presentation:'modal'}}>
+          <principal.Screen name="map" component={MapsScreen}/>
+        </principal.Group>
       </principal.Navigator>
     </>
   );

@@ -12,7 +12,7 @@ import { fetchOrdenes } from "../../store/Ordenes/Thunks";
 export const CoreScreen = () => {
   const dispatch = useDispatch<any>();
   const getOrdenes = () => {
-    dispatch(fetchOrdenes());
+    dispatch(fetchOrdenes(''));
   };
 
   useEffect(() => {

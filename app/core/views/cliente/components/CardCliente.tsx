@@ -6,8 +6,10 @@ import { useTheme } from "@ui-kitten/components";
 import { useSelector } from "react-redux";
 import { SelectorInterface } from "../../../../interfaces/SelectorInterfaces";
 import { Cargando } from "../../../../components/Cargando";
+import { useNavigation } from "@react-navigation/native";
 
 export const CardCliente = () => {
+  const navigation:any = useNavigation()
   const { contract, isLoading } = useSelector(
     (d: SelectorInterface) => d.ordenesId
   );
@@ -74,6 +76,7 @@ export const CardCliente = () => {
             tw`h-14 border-gray-200 border rounded-br-lg flex justify-center items-center`,
             { width: "auto", flexBasis: 121 },
           ]}
+          onPress={()=>navigation.navigate('map')}
         >
           <Text style={{ color: theme["color-danger-500"] }}>
             <Ionicons name="map" /> Mapa
