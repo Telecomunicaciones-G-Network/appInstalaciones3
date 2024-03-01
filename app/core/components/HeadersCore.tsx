@@ -3,8 +3,11 @@ import { Text, View } from "react-native";
 import tw from "twrnc";
 import { stylesGlobal } from "../../style/styleGlobal";
 import { Ionicons } from "@expo/vector-icons";
+import { useSelector } from "react-redux";
+import { SelectorInterface } from "../../interfaces/SelectorInterfaces";
 
 export const HeadersCore = () => {
+  const {desde,hasta,type}=useSelector((d:SelectorInterface)=>d.core)
   const theme = useTheme();
   return (
     <>
@@ -15,7 +18,7 @@ export const HeadersCore = () => {
       ]}
     >
       <Text style={[tw`text-white font-semibold text-2xl`, stylesGlobal.Title]}>
-        Finalizado
+        {type?'FINALIZADOS':'ASIGNADOS'}
       </Text>
       {/* <Text style={[tw`text-white font-semibold text-xl `, stylesGlobal.Title]}>
         Finalizado
@@ -26,7 +29,7 @@ export const HeadersCore = () => {
         { backgroundColor: theme["color-primary-500"] },
       ]}>
         <Text style={tw`text-white`}>
-          Desde: 20-12-2022, hasta: 20-12-2022
+          Desde: {desde}, hasta: {hasta}
         </Text>
       </View>
     </>

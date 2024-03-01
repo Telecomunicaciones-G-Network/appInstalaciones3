@@ -6,18 +6,27 @@ import { useTheme } from "@ui-kitten/components";
 import { ModalFiltroFecha } from "../components/ModalFiltroFecha";
 import { Splash } from "../../helpers/Splash";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchOrdenes } from "../../store/Ordenes/Thunks";
+import { fetchOpciones } from "../../store/instalacion/Thunks";
+import { SelectorInterface } from "../../interfaces/SelectorInterfaces";
+import { OrdenesParams } from "../class/OrdenesParams";
 
 export const CoreScreen = () => {
   const dispatch = useDispatch<any>();
-  const getOrdenes = () => {
-    dispatch(fetchOrdenes(''));
+  const params = new OrdenesParams();
+  const { desde, hasta, type } = useSelector((d: SelectorInterface) => d.core);
+  const getOrdenes = (params: any) => {
+    dispatch(fetchOrdenes(params));
+    dispatch(fetchOpciones());
   };
 
   useEffect(() => {
-    getOrdenes();
-  }, []);
+    params.since = desde;
+    params.until = hasta;
+    type && (params.type = type);
+    getOrdenes(params);
+  }, [desde, hasta, type]);
 
   return (
     <>

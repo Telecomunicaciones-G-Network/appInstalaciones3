@@ -12,6 +12,7 @@ export interface OrdenId {
     finish_date: any
     group: Group
     id: number
+    image_order: ImageOrder[]
     municipality: Municipality
     nap_box: number
     option: number
@@ -159,5 +160,12 @@ export interface OrdenId {
     name: string
     state: number
     ubication_zones: any[][]
+  }
+  
+  export interface ImageOrder {
+    detail: string
+    id: number
+    image: string
+    order: string
   }
   

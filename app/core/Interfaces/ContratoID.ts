@@ -54,7 +54,7 @@ export interface Contrato {
     nodo_name: any
     plan: Plan
     plan_corpor: any
-    service_detail: any[]
+    service_detail: ServiceDetail[]
     service_type: ServiceType
     status: number
   }
@@ -74,4 +74,22 @@ export interface Contrato {
     name: string
     services: any[]
   }
+
+  export interface ServiceDetail {
+    contract_detail: number
+    id: number
+    ip: string
+    mac: string
+    nap_box_coordinate: string
+    nap_box_id: number
+    nap_box_name: string
+    nap_port: string
+    pppassw: any
+    ppuser: any
+    product: any
+    redIPV4: string
+    serial: string
+    smart_olt: any
+  }
+  
   

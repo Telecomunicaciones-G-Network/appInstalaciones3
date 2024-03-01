@@ -17,9 +17,6 @@ export const ScrollViewApro = ({ children }: { children: JSX.Element }) => {
     if (nap_box && contrato) {
       dispatch(fetchNap_box(nap_box.id));
       dispatch(fetchIdContratoId(contrato.id));
-      console.log('====================================');
-      console.log(contrato.contract_detail[0].service_type.services);
-      console.log('====================================');
     }
     setRefreshing(false);
   };

@@ -5,7 +5,7 @@ import { TouchableOpacity, View } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import tw from "twrnc";
 
-export const InputDateFecha = () => {
+export const InputDateFecha = ({title,setearFecha}:{title:string,setearFecha:(fecha:any)=>void}) => {
   const [value, setValue] = useState("");
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   
@@ -22,16 +22,17 @@ export const InputDateFecha = () => {
     const dia = fecha.getDate();
     const mes = fecha.getMonth() + 1;
     const anio = fecha.getFullYear();
-    const formater = `${dia}-${mes}-${anio}`;
+    const formater = `${anio}-${mes}-${dia}`;
     setValue(formater);
+    setearFecha((d: any)=>({...d,[title.toLocaleLowerCase()]:formater}))
     hideDatePicker();
   };
   return (
     <View style={tw`my-3`}>
       <Input
         value={value}
-        label="Fecha"
-        placeholder="Place your Text"
+        label={title}
+        placeholder="Introduzca la fecha"
         accessoryRight={
           <TouchableOpacity activeOpacity={0.5} onPress={showDatePicker}>
             <Ionicons name="calendar" size={20} />

@@ -5,6 +5,7 @@ import {
   Client,
   Contract,
   Group,
+  ImageOrder,
   Municipality,
   OrdenId,
   OrderDetail,
@@ -27,6 +28,7 @@ export interface OrdenIdSliceInterface {
   sector: Sector | false;
   state: State | false;
   zone: Zone | false;
+  image_order:ImageOrder[]
 }
 
 export const initialStateOrdenId: OrdenIdSliceInterface = {
@@ -42,6 +44,7 @@ export const initialStateOrdenId: OrdenIdSliceInterface = {
   sector: false,
   state: false,
   zone: false,
+  image_order : []
 };
 
 export const ordenIdSlice = createSlice({
@@ -66,6 +69,7 @@ export const ordenIdSlice = createSlice({
           sector,
           state: estado,
           zone,
+          image_order
         } = payload;
         state.ordenID = payload;
         state.city = city;
@@ -78,7 +82,8 @@ export const ordenIdSlice = createSlice({
         state.sector = sector;
         state.state = estado;
         state.zone = zone;
-        state.ordenID=payload
+        state.image_order = state.image_order
+        state.image_order=image_order
       });
   },
 });

@@ -1,13 +1,28 @@
 import { useTheme } from "@ui-kitten/components";
-import { Text, View } from "react-native";
+import { RefreshControl, Text, View } from "react-native";
 import tw from "twrnc";
 import { CardImagenes } from "./components/CardImagenes";
 import { ScrollView } from "react-native-gesture-handler";
+import { useDispatch } from "react-redux";
+import { useCallback, useState } from "react";
 
 export const ImagenesViews = () => {
+  const dispatch=useDispatch<any>()
   const theme = useTheme();
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+
   return (
-    <ScrollView>
+    <ScrollView   refreshControl={
+      <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>
+    }>
       <View
         style={[tw`h-24`, { backgroundColor: theme["color-primary-500"] }]}
       />

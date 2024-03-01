@@ -4,18 +4,29 @@ import { useState } from "react";
 import { View } from "react-native";
 import tw from "twrnc";
 import { OrdenesParams } from "../class/OrdenesParams";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchOrdenes } from "../../store/Ordenes/Thunks";
+import { SelectorInterface } from "../../interfaces/SelectorInterfaces";
 
 export const SearchCore = () => {
-  const dispatch = useDispatch<any>()
-  const params=new OrdenesParams()
+  const dispatch = useDispatch<any>();
+  const { desde, hasta, type } = useSelector((d: SelectorInterface) => d.core);
+  const params = new OrdenesParams();
   const [value, setValue] = useState("");
 
   const handleInput = (text: any) => {
-    params.search = text
+    params.search = text;
+    if (text.length === 0) {
+      params.since = desde;
+      params.until = hasta;
+    } else {
+      delete params.since;
+      delete params.until;
+    }
+
+    type && (params.type = type);
     setValue(text);
-    dispatch(fetchOrdenes(params))
+    dispatch(fetchOrdenes(params));
   };
 
   return (

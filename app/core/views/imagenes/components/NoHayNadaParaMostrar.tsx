@@ -5,14 +5,30 @@ import { View, Text, Image } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import tw from "twrnc";
 import * as ImagePicker from "expo-image-picker";
+import { useDispatch, useSelector } from "react-redux";
+import { SelectorInterface } from "../../../../interfaces/SelectorInterfaces";
+import * as FileSystem from "expo-file-system";
+import { coreApi } from "../../../../api/CoreApi";
+import {
+  mostrarCargando,
+  ocultarCargando,
+} from "../../../../store/splash/splashSlice";
+import { fetchIdOrden } from "../../../../store/Ordenes/Thunks";
+import { ToastSuccess } from "../../../../libs/Toast";
 
-export const NoHayNadaParaMostrar = () => {
+type extensiones = "jpg" | "png" | "jpeg";
+
+export const NoHayNadaParaMostrar = ({ title }: { title: string }) => {
+  const dispatch = useDispatch<any>();
+  const { ordenID } = useSelector((d: SelectorInterface) => d.ordenesId);
   const theme = useTheme();
   const s = theme["color-success-500"];
   const w = theme["color-warning-500"];
   const i = theme["color-info-500"];
 
   const [image, setImage] = useState<any>(null);
+  const [porGuardar, setPorGuardar] = useState<any>(false);
+  const [image64, setImage64] = useState<any>(null);
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -21,8 +37,44 @@ export const NoHayNadaParaMostrar = () => {
     });
     if (!result.canceled) {
       const { uri } = result.assets[0];
-      setImage(uri);
+      const extension = uri.split(".").pop()!.toLowerCase();
+      if (extension === "jpg" || extension === "png" || extension === "jpeg") {
+        const fileContent = await FileSystem.readAsStringAsync(uri, {
+          encoding: FileSystem.EncodingType.Base64,
+        });
+        setImage64(fileContent);
+        setPorGuardar(true)
+        setImage(uri);
+      }
     }
+  };
+
+  const saveImage = () => {
+    if (!ordenID) return;
+    dispatch(mostrarCargando());
+    const extension = image.split(".").pop()!.toLowerCase();
+
+    const body: any = {
+      order: ordenID.contract.installation_order,
+      detail: title,
+    };
+    body.files = [
+      {
+        [extension]: [`data:image/jpeg;base64,${image64}`],
+      },
+    ];
+    coreApi
+      .post("/api/gsoft/installations/image/", body)
+      .then((result) => {
+        ToastSuccess('Imagen guardar con exito')
+        setPorGuardar(false)
+        dispatch(ocultarCargando());
+        dispatch(fetchIdOrden(ordenID.id));
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch(ocultarCargando());
+      });
   };
 
   return (
@@ -43,16 +95,16 @@ export const NoHayNadaParaMostrar = () => {
         style={[tw`flex justify-center items-center pl-3`, { flexBasis: 40 }]}
       >
         <TouchableOpacity activeOpacity={0.5} onPress={pickImage}>
-          {image ? (
+          {image   ? (
             <Ionicons name="create" size={26} style={{ color: w }} />
           ) : (
             <Ionicons name="add-circle" size={26} style={{ color: s }} />
           )}
         </TouchableOpacity>
-        {image && (
+        {( porGuardar) && (
           <TouchableOpacity
             activeOpacity={0.5}
-            onPress={pickImage}
+            onPress={saveImage}
             style={tw`mt-10`}
           >
             <Ionicons name="save" size={26} style={{ color: i }} />

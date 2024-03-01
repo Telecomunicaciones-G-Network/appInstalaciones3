@@ -1,7 +1,15 @@
 import { Radio, RadioGroup, useTheme } from "@ui-kitten/components";
-import { useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { useCallback, useState } from "react";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import tw from "twrnc";
+import { SelectorInterface } from "../../../interfaces/SelectorInterfaces";
+import { Ionicons } from "@expo/vector-icons";
+import { RadioGr } from "./RadioGr";
+import { NoHayNadaParaMostrar } from "../imagenes/components/NoHayNadaParaMostrar";
+import { Cargando } from "../../../components/Cargando";
+import { RefreshControl } from "react-native-gesture-handler";
+import { fetchOpciones } from "../../../store/instalacion/Thunks";
 
 const data = [
   {
@@ -31,8 +39,20 @@ const data = [
 ];
 
 export const FinalizacionView = () => {
+  const { isLoading, opciones } = useSelector(
+    (d: SelectorInterface) => d.opciones
+  );
   const theme = useTheme();
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const dispatch = useDispatch<any>();
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    dispatch(fetchOpciones());
+    setRefreshing(false);
+  }, []);
+
   return (
     <>
       <View
@@ -40,31 +60,30 @@ export const FinalizacionView = () => {
       />
       <View style={tw`p-5 mt-[-80px]`}>
         <View>
-          <Text style={[tw`text-2xl text-white font-semibold`]}>Cancelar Orden</Text>
-          <Text style={[tw`text-sm text-white font-semibold`]}>Opciones para cancelar</Text>
+          <Text style={[tw`text-2xl text-white font-semibold`]}>
+            Cancelar Orden
+          </Text>
+          <Text style={[tw`text-sm text-white font-semibold`]}>
+            Opciones para cancelar
+          </Text>
         </View>
 
-        <View style={tw`p-4`}>
-          <RadioGroup
-            selectedIndex={selectedIndex}
-            onChange={(index) => setSelectedIndex(index)}
-          >
-            {data.map((d) => (
-              <Radio status="danger" key={d.id}>
-                <Text style={tw`font-semibold`}>{d.value}</Text>
-              </Radio>
-            ))}
-          </RadioGroup>
-          <TouchableOpacity
-            activeOpacity={0.5}
-            style={[
-              tw`flex justify-center items-center rounded-lg h-10 mt-10`,
-              { backgroundColor: theme["color-primary-500"] },
-            ]}
-          >
-            <Text style={tw`text-white font-semibold`}>Agregar Opcion</Text>
-          </TouchableOpacity>
-        </View>
+        <ScrollView
+          style={tw`p-4`}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >
+          {isLoading ? (
+            <View style={tw`flex-1 justify-center items-center`}>
+              <Cargando />
+            </View>
+          ) : opciones.length > 0 ? (
+            <RadioGr />
+          ) : (
+            <NoHayNadaParaMostrar />
+          )}
+        </ScrollView>
       </View>
     </>
   );

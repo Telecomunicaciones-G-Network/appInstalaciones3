@@ -10,6 +10,8 @@ import { Cargando } from "../../components/Cargando";
 import { Ordenes } from "../Interfaces/OrdenesInterface";
 import { ScrollView } from "react-native-gesture-handler";
 import { useCallback, useState } from "react";
+import { OrdenesParams } from "../class/OrdenesParams";
+import { fetchOrdenes } from "../../store/Ordenes/Thunks";
 
 const data = new Array(20).fill({
   title: "Title for Item",
@@ -18,6 +20,9 @@ const data = new Array(20).fill({
 
 export const ListCore = () => {
   const navigation = useNavigation<any>();
+  const dispatch = useDispatch<any>();
+  const params = new OrdenesParams();
+  const { desde, hasta, type } = useSelector((d: SelectorInterface) => d.core);
   const { isLoading, ordenes } = useSelector(
     (d: SelectorInterface) => d.ordenes
   );
@@ -26,10 +31,15 @@ export const ListCore = () => {
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 2000);
+    params.since = desde;
+    params.until = hasta;
+    type && (params.type = type);
+    dispatch(fetchOrdenes(params));
+    setRefreshing(false);
   }, []);
+
+
+  
 
   const renderItemAccessory = ({ id,nap_box,contract }: any): React.ReactElement => {
     return (

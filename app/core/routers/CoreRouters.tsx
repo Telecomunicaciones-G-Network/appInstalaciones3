@@ -18,6 +18,7 @@ import { fetchIdOrden } from "../../store/Ordenes/Thunks";
 
 import { fetchNap_box } from "../../store/cajaNap/Thunks";
 import { fetchIdContratoId } from "../../store/contrato/Thunks";
+import { fetchOpciones } from "../../store/instalacion/Thunks";
 
 const Tab = createBottomTabNavigator();
 

@@ -10,6 +10,7 @@ import { Ionicons } from "@expo/vector-icons";
 import tw from "twrnc";
 import { useDispatch } from "react-redux";
 import { mostrarModalFecha } from "../../store/modals/modalFecha";
+import { setType } from "../../store/core/coreSlice";
 
 export const MenuOver = () => {
   const theme = useTheme();
@@ -22,8 +23,10 @@ const dispatch = useDispatch<any>()
         dispatch(mostrarModalFecha())
         break;
       case 1:
+        dispatch(setType(false))
         break;
       case 2:
+        dispatch(setType(11))
         break;
 
       default:

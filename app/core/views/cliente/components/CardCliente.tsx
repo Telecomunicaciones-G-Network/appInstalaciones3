@@ -9,11 +9,22 @@ import { Cargando } from "../../../../components/Cargando";
 import { useNavigation } from "@react-navigation/native";
 
 export const CardCliente = () => {
-  const navigation:any = useNavigation()
+  const navigation: any = useNavigation();
   const { contract, isLoading } = useSelector(
     (d: SelectorInterface) => d.ordenesId
   );
   const theme = useTheme();
+
+  const handleMap = () => {
+    if (contract) {
+      navigation.navigate("map", {
+        lat: contract.latitude,
+        lng: contract.longitude,
+        nombre:`${contract.client_name} ${contract.client_name_lastname}`,
+        orden:contract.order_id,
+      });
+    }
+  };
 
   return (
     <View style={tw`bg-white rounded-lg mt-[-90px]`}>
@@ -76,7 +87,7 @@ export const CardCliente = () => {
             tw`h-14 border-gray-200 border rounded-br-lg flex justify-center items-center`,
             { width: "auto", flexBasis: 121 },
           ]}
-          onPress={()=>navigation.navigate('map')}
+          onPress={handleMap}
         >
           <Text style={{ color: theme["color-danger-500"] }}>
             <Ionicons name="map" /> Mapa

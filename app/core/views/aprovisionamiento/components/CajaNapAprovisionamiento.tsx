@@ -6,11 +6,29 @@ import { Ionicons } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 import { SelectorInterface } from "../../../../interfaces/SelectorInterfaces";
 import { ScrollViewApro } from "./ScrollViewApro";
+import { useNavigation } from "@react-navigation/native";
 
 export const CajaNapAprovisionamiento = () => {
+  const navigation = useNavigation<any>()
   const { isLoading, nap_box } = useSelector(
     (d: SelectorInterface) => d.nap_box
   );
+  const { contrato } = useSelector(
+    (d: SelectorInterface) => d.contratoID
+  );
+
+  const handleVer=()=>{
+    if (nap_box) {
+      if (contrato) {
+        navigation.navigate("map", {
+          lat: nap_box.latitude,
+          lng: nap_box.longitude,
+          nombre:`${contrato.client_name} ${contrato.client_name_lastname}`,
+        });
+        
+      }
+    }
+  }
 
   const theme = useTheme();
   return (
@@ -25,11 +43,11 @@ export const CajaNapAprovisionamiento = () => {
             )}
             style={tw`py-7`}
             accessoryLeft={() => <Ionicons name="cube" size={25} />}
-            // accessoryRight={() => (
-            //   <TouchableOpacity activeOpacity={0.5} style={[tw`p-2 rounded-lg`,{backgroundColor:theme['color-danger-500']}]}>
-            //     <Text style={tw`text-white font-semibold`}>Editar</Text>
-            //   </TouchableOpacity>
-            // )}
+            accessoryRight={() => (
+              <TouchableOpacity onPress={handleVer} activeOpacity={0.5} style={[tw`p-2 rounded-lg`,{backgroundColor:theme['color-danger-500']}]}>
+                <Text style={tw`text-white font-semibold`}>Ver</Text>
+              </TouchableOpacity>
+            )}
           />
           <Divider />
           <ListItem

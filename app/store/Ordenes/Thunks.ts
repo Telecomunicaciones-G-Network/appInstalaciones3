@@ -26,6 +26,7 @@ export const fetchIdOrden = createAsyncThunk(
       .get(`/api/gsoft/installations/orders/${id}/`)
       .then(({ data, status }) => {
         if (status == 200) {
+          
           return data;
         }
         return initialStateOrdenId;
