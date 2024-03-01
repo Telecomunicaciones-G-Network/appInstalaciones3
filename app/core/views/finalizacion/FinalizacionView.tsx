@@ -81,7 +81,16 @@ export const FinalizacionView = () => {
           ) : opciones.length > 0 ? (
             <RadioGr />
           ) : (
-            <NoHayNadaParaMostrar />
+            <View style={tw`flex-1  items-center`}>
+              <Ionicons
+                name="close-circle-outline"
+                style={tw`text-gray-400 mt-2`}
+                size={50}
+              />
+              <Text style={tw`text-lg text-gray-400 font-semibold`}>
+                No hay nada para mostrar
+              </Text>
+            </View>
           )}
         </ScrollView>
       </View>

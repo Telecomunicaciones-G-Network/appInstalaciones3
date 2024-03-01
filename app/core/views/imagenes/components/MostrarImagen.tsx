@@ -27,9 +27,9 @@ export const MostrarImagen = ({img}:{img:any}) => {
         <TouchableOpacity activeOpacity={0.5} style={tw`mb-7`}>
           <Ionicons name="pencil" size={26} style={{ color: w }} />
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.5} style={tw``}>
+        {/* <TouchableOpacity activeOpacity={0.5} style={tw``}>
           <Ionicons name="trash" size={26} style={{ color: d }} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </View>
   );

@@ -45,11 +45,7 @@ export const CardImagenes = ({ title }: Props) => {
   return (
     <View style={tw`mx-2 mt-2`}>
       <Card header={Header}>
-        {!filtrado ? (
-          <NoHayNadaParaMostrar title={title} />
-        ) : (
-          <MostrarImagen img={filtrado?.image} />
-        )}
+        <NoHayNadaParaMostrar title={title} img={filtrado?.image}/>
       </Card>
     </View>
   );

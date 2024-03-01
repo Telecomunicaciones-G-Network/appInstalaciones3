@@ -18,7 +18,13 @@ import { ToastSuccess } from "../../../../libs/Toast";
 
 type extensiones = "jpg" | "png" | "jpeg";
 
-export const NoHayNadaParaMostrar = ({ title }: { title: string }) => {
+export const NoHayNadaParaMostrar = ({
+  title,
+  img,
+}: {
+  title: string;
+  img?: string;
+}) => {
   const dispatch = useDispatch<any>();
   const { ordenID } = useSelector((d: SelectorInterface) => d.ordenesId);
   const theme = useTheme();
@@ -43,7 +49,7 @@ export const NoHayNadaParaMostrar = ({ title }: { title: string }) => {
           encoding: FileSystem.EncodingType.Base64,
         });
         setImage64(fileContent);
-        setPorGuardar(true)
+        setPorGuardar(true);
         setImage(uri);
       }
     }
@@ -66,8 +72,8 @@ export const NoHayNadaParaMostrar = ({ title }: { title: string }) => {
     coreApi
       .post("/api/gsoft/installations/image/", body)
       .then((result) => {
-        ToastSuccess('Imagen guardar con exito')
-        setPorGuardar(false)
+        ToastSuccess("Imagen guardar con exito");
+        setPorGuardar(false);
         dispatch(ocultarCargando());
         dispatch(fetchIdOrden(ordenID.id));
       })
@@ -88,20 +94,26 @@ export const NoHayNadaParaMostrar = ({ title }: { title: string }) => {
         {image ? (
           <Image source={{ uri: image }} style={tw`h-56 w-72 `} />
         ) : (
-          <Text>No hay nada para mostrar</Text>
+          <>
+            {img ? (
+              <Image source={{ uri: img }} style={tw`h-57 w-72`} />
+            ) : (
+              <Text>No hay nada para mostrar</Text>
+            )}
+          </>
         )}
       </View>
       <View
         style={[tw`flex justify-center items-center pl-3`, { flexBasis: 40 }]}
       >
         <TouchableOpacity activeOpacity={0.5} onPress={pickImage}>
-          {image   ? (
+          {img || image ? (
             <Ionicons name="create" size={26} style={{ color: w }} />
           ) : (
             <Ionicons name="add-circle" size={26} style={{ color: s }} />
           )}
         </TouchableOpacity>
-        {( porGuardar) && (
+        {porGuardar && (
           <TouchableOpacity
             activeOpacity={0.5}
             onPress={saveImage}

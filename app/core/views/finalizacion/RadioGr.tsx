@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SelectorInterface } from "../../../interfaces/SelectorInterfaces";
 import { useDispatch, useSelector } from "react-redux";
 import { Radio, RadioGroup, useTheme } from "@ui-kitten/components";
@@ -28,14 +28,19 @@ export const RadioGr = () => {
       patchOpciones(ordenID.id, d)
         .then(({ data, status }) => {
           dispatch(ocultarCargando());
-          console.log(status);
         })
         .catch((err) => {
           dispatch(ocultarCargando());
-          console.log(err);
         });
     }
   };
+
+  useEffect(() => {
+    if (ordenID) {
+      const filt = opciones.findIndex((d) => d.id == ordenID.option);
+      setSelectedIndex(filt);
+    }
+  }, [ordenID]);
 
   return (
     <>
@@ -49,16 +54,18 @@ export const RadioGr = () => {
           </Radio>
         ))}
       </RadioGroup>
-      <TouchableOpacity
-        activeOpacity={0.5}
-        style={[
-          tw`flex justify-center items-center rounded-lg h-10 mt-10`,
-          { backgroundColor: theme["color-primary-500"] },
-        ]}
-        onPress={onSubmit}
-      >
-        <Text style={tw`text-white font-semibold`}>Agregar Opcion</Text>
-      </TouchableOpacity>
+      {ordenID && !ordenID.option && (
+        <TouchableOpacity
+          activeOpacity={0.5}
+          style={[
+            tw`flex justify-center items-center rounded-lg h-10 mt-10`,
+            { backgroundColor: theme["color-primary-500"] },
+          ]}
+          onPress={onSubmit}
+        >
+          <Text style={tw`text-white font-semibold`}>Agregar Opcion</Text>
+        </TouchableOpacity>
+      )}
     </>
   );
 };
