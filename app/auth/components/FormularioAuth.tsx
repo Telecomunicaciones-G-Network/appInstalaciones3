@@ -63,7 +63,7 @@ export const FormularioAuth = ({Ingresar}:Props) => {
           <>
             <Input
               label="Usuario"
-              placeholder="Ingrese de corre"
+              placeholder="Ingrese el usuario"
               status={errors.email?"danger":"basic"}
               onBlur={onBlur}
               onChangeText={onChange}
@@ -71,7 +71,7 @@ export const FormularioAuth = ({Ingresar}:Props) => {
               style={tw`w-[80%] rounded-lg bg-white focus:border-red-500`}
               size="large"
             />
-             {errors.email && <Text style={tw`text-red-500`}>{errors.email.message}</Text>}
+             {errors.email && <Text style={tw`text-red-500 font-semibold`}>{errors.email.message}</Text>}
           </>
         )}
       />
@@ -92,13 +92,13 @@ export const FormularioAuth = ({Ingresar}:Props) => {
               style={tw`rounded-lg bg-white w-full`}
               size="large"
             />
-            {errors.password && <Text style={tw`text-red-500`}>{errors.password.message}</Text>}
+            {errors.password && <Text style={tw`text-red-500 font-semibold`}>{errors.password.message}</Text>}
           </View>
         )}
       />
 
       <TouchableOpacity
-        style={tw`flex rounded-lg bg-red-500 border-0 shadow-md justify-center items-center h-12 `}
+        style={[tw`flex rounded-lg border-0 shadow-md justify-center items-center h-12 `,{backgroundColor:'#FA6419'}]}
         activeOpacity={0.5}
         
         onPress={handleSubmit(onSubmit)}

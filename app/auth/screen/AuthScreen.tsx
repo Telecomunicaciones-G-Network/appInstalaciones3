@@ -4,18 +4,13 @@ import tw from "twrnc";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FormularioAuth } from "../components/FormularioAuth";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 import { authApi } from "../../api/AuthApi";
 import { ToastError, ToastSuccess } from "../../libs/Toast";
 import Storage from "../../libs/storage";
 
 export const AuthScreen = () => {
-  // onPress={() =>
-  //   navigation.reset({
-  //     index: 0,
-  //     routes: [{ name: "core" as never }],
-  //   })
-  // }
+  
   const navigation = useNavigation();
 
   const saveStorage = async (key: any, value: any) => {
@@ -49,11 +44,11 @@ export const AuthScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={tw`flex-1 justify-center items-center`}>
+      <View style={[tw`flex-1 justify-center items-center`,{backgroundColor:'#6C6C6C'}]}>
         <View>
           <Image
-            source={require("../../../assets/img/g3.png")}
-            style={tw`h-12 w-72`}
+            source={require("../../../assets/img/morden-logo2.png")}
+            style={tw`h-52 w-80`}
           />
         </View>
         <FormularioAuth Ingresar={handleLogin} />
