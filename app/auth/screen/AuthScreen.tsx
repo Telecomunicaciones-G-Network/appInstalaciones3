@@ -1,16 +1,19 @@
-import { useState } from "react";
-import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Image } from "react-native";
 import tw from "twrnc";
-
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FormularioAuth } from "../components/FormularioAuth";
-import { useNavigation, useTheme } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { authApi } from "../../api/AuthApi";
 import { ToastError, ToastSuccess } from "../../libs/Toast";
 import Storage from "../../libs/storage";
+import { useDispatch } from "react-redux";
+import {
+  mostrarCargando,
+  ocultarCargando,
+} from "../../store/splash/splashSlice";
 
 export const AuthScreen = () => {
-  
+  const dispatch = useDispatch();
   const navigation = useNavigation();
 
   const saveStorage = async (key: any, value: any) => {
@@ -19,6 +22,7 @@ export const AuthScreen = () => {
   };
 
   const handleLogin = (body: any) => {
+    dispatch(mostrarCargando());
     authApi
       .post("/login/", body)
       .then(({ data }) => {
@@ -26,14 +30,15 @@ export const AuthScreen = () => {
         saveStorage("accessToken", AccessToken);
         saveStorage("refreshToken", RefreshToken);
         saveStorage("user", user);
-        ToastSuccess('Ingreso exitoso')
+        dispatch(ocultarCargando());
+        ToastSuccess("Ingreso exitoso");
         navigation.reset({
           index: 0,
           routes: [{ name: "core" as never }],
         });
       })
       .catch((err) => {
-        
+        dispatch(ocultarCargando());
         if (err.response.status == 400)
           return ToastError(err.response.data.message);
         if (err.response.status == 500)
@@ -44,7 +49,12 @@ export const AuthScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={[tw`flex-1 justify-center items-center`,{backgroundColor:'#6C6C6C'}]}>
+      <View
+        style={[
+          tw`flex-1 justify-center items-center`,
+          { backgroundColor: "#6C6C6C" },
+        ]}
+      >
         <View>
           <Image
             source={require("../../../assets/img/morden-logo2.png")}
@@ -56,22 +66,3 @@ export const AuthScreen = () => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  captionContainer: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  captionIcon: {
-    width: 10,
-    height: 10,
-    marginRight: 5,
-  },
-  captionText: {
-    fontSize: 12,
-    fontWeight: "400",
-    fontFamily: "opensans-regular",
-    color: "#8F9BB3",
-  },
-});

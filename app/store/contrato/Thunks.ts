@@ -9,7 +9,9 @@ export const fetchIdContratoId = createAsyncThunk(
       .get(`/api/gsoft/contracts/${id}/`)
       .then(({ data, status }) => {
         
+        
         if (status == 200) {
+          console.log(JSON.stringify(data))
           return data;
         }
         return inicialStateContratoID;

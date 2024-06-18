@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Button, TouchableOpacity } from "react-native";
+import { StyleSheet,  TouchableOpacity } from "react-native";
 import {
   Layout,
   MenuItem,
@@ -26,7 +26,10 @@ const dispatch = useDispatch<any>()
         dispatch(setType(false))
         break;
       case 2:
-        dispatch(setType(11))
+        dispatch(setType(41))
+        break;
+      case 3:
+        dispatch(setType(42))
         break;
 
       default:
@@ -61,8 +64,12 @@ const dispatch = useDispatch<any>()
           accessoryLeft={<Ionicons name="calendar" size={20} />}
         />
         <MenuItem
-          title="Asignadas"
+          title="Todos"
           accessoryLeft={<Ionicons name="arrow-redo" size={20} />}
+        />
+        <MenuItem
+          title="No finalizada"
+          accessoryLeft={<Ionicons name="close-circle" size={20} color="black" />}
         />
         <MenuItem
           title="Finalizada"

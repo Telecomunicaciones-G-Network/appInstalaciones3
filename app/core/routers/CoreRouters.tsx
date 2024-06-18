@@ -53,6 +53,8 @@ export const CoreRouters = ({ route }: Props) => {
   const contractID = route.params ? route.params?.contract : 0;
   const dispatch = useDispatch<any>();
   const getCliente = (idOrden: any) => {
+    console.log('llegue');
+    
     dispatch(fetchIdOrden(idOrden));
     dispatch(fetchNap_box(nap_box));
     dispatch(fetchIdContratoId(contractID));

@@ -13,7 +13,7 @@ export const ListDetallesCliente = () => {
     (d: SelectorInterface) => d.ordenesId
   );
   return (
-    <View style={[tw`rounded-lg bg-white shadow-sm p-2 pb-8`]}>
+    <View style={[tw`rounded-lg bg-white shadow-sm p-2 pb-8 h-[80%]`]}>
       {isLoading ? (
         <Cargando />
       ) : (

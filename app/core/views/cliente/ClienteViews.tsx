@@ -10,48 +10,64 @@ import { useDispatch, useSelector } from "react-redux";
 import { SelectorInterface } from "../../../interfaces/SelectorInterfaces";
 import { fetchIdOrden } from "../../../store/Ordenes/Thunks";
 import { coreApi } from "../../../api/CoreApi";
-import { ToastSuccess } from "../../../libs/Toast";
+import { ToastError, ToastSuccess } from "../../../libs/Toast";
 import { ModalConfirmar } from "./components/ModalConfirmar";
-import { mostrarCargando, ocultarCargando } from "../../../store/splash/splashSlice";
+import {
+  mostrarCargando,
+  ocultarCargando,
+} from "../../../store/splash/splashSlice";
+
 
 export const ClienteViews = () => {
-  const { ordenID, isLoading } = useSelector(
+  const { ordenID, isLoading,image_order } = useSelector(
     (d: SelectorInterface) => d.ordenesId
   );
+
+
   
+  
+  
+
   const dispatch = useDispatch<any>();
   const [refreshing, setRefreshing] = useState(false);
   const [visible, setVisible] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
     if (ordenID) {
-      console.log(ordenID.status);
-      
+      console.log(JSON.stringify(ordenID) );
       dispatch(fetchIdOrden(ordenID.id));
       setRefreshing(false);
     }
   };
 
-  const finalizarOrden=()=>{
-    dispatch(mostrarCargando())
+  const finalizarOrden = () => {
+    
+    dispatch(mostrarCargando());
     if (ordenID) {
-      console.log('llego');
-      coreApi.patch(`/api/gsoft/installations/orders/${ordenID.id}/?change_status=true`,{
-        "status": 42
-    })
-      .then((result) => {
-        console.log(result);
-        ToastSuccess('Finalizado con exito')
-        dispatch(ocultarCargando())
-        onRefresh()
-        setVisible(false)
-      }).catch((err) => {
-        dispatch(ocultarCargando())
-        console.log(err.response);
-      });
-      
+      coreApi
+        .patch(
+          `/api/gsoft/installations/orders/${ordenID.id}/?change_status=true`,
+          {
+            status: 42,
+          }
+        )
+        .then((result) => {
+          ToastSuccess("Finalizado con exito");
+          dispatch(ocultarCargando());
+          onRefresh();
+          setVisible(false);
+          dispatch(fetchIdOrden(ordenID.id));
+        })
+        .catch((err) => {
+          dispatch(ocultarCargando());
+          console.log(err.response);
+        });
     }
-  }
+  };
+
+
+
+
   const theme = useTheme();
   return (
     <ScrollView
@@ -65,17 +81,22 @@ export const ClienteViews = () => {
         />
         <View style={tw`px-4`}>
           <CardCliente />
-          {ordenID && ordenID.status!==42 && (
+          {ordenID && ordenID.status !== 42 && (
             <TouchableOpacity
               activeOpacity={0.5}
               style={[
                 tw`w-full flex justify-center items-center rounded-lg h-10 my-5`,
-                { backgroundColor: theme["color-danger-500"] },
+                { backgroundColor: theme["color-success-500"] },
               ]}
-              onPress={()=>setVisible(true)}
-            > 
+              onPress={() => {                
+                if (image_order.length < 4) {
+                  return ToastError('Debes seleccionar al menos 4 imágenes')
+                }
+                setVisible(true)
+              }}
+            >
               <Text style={tw`text-white font-semibold`}>
-                Iniciar <Ionicons name="play" />
+                Finalizado <Ionicons name="checkmark-circle-outline" />
               </Text>
             </TouchableOpacity>
           )}
@@ -83,7 +104,11 @@ export const ClienteViews = () => {
           <ListDetallesCliente />
         </View>
       </View>
-      <ModalConfirmar visible={visible} setVisible={setVisible} confirmar={finalizarOrden}/>
+      <ModalConfirmar
+        visible={visible}
+        setVisible={setVisible}
+        confirmar={finalizarOrden}
+      />
     </ScrollView>
   );
 };

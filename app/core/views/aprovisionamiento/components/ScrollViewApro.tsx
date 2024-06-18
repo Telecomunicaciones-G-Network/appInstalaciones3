@@ -6,7 +6,7 @@ import { RefreshControl, ScrollView } from "react-native";
 import { fetchIdContratoId } from "../../../../store/contrato/Thunks";
 
 export const ScrollViewApro = ({ children }: { children: JSX.Element }) => {
-  const { nap_box } = useSelector((d: SelectorInterface) => d.nap_box);
+  const { napBox } = useSelector((d: SelectorInterface) => d.nap_box);
   const { contrato } = useSelector((d: SelectorInterface) => d.contratoID);
   const dispatch = useDispatch<any>();
 
@@ -14,8 +14,8 @@ export const ScrollViewApro = ({ children }: { children: JSX.Element }) => {
   
   const onRefresh = () => {
     setRefreshing(true);
-    if (nap_box && contrato) {
-      dispatch(fetchNap_box(nap_box.id));
+    if (napBox && contrato) {
+      dispatch(fetchNap_box(napBox.id));
       dispatch(fetchIdContratoId(contrato.id));
     }
     setRefreshing(false);

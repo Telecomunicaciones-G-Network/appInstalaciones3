@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchIdContratoId } from "./Thunks";
-import { Contrato, ServiceDetail } from "../../core/Interfaces/ContratoID";
+import { Contrato, ServiceDetail } from '../../core/Interfaces/ContratoID';
 
 export interface ContratoIDInterface {
   isLoading: boolean;
@@ -26,6 +26,8 @@ export const contratoIdSlice = createSlice({
       .addCase(fetchIdContratoId.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.contrato = payload;
+        
+        
         state.serviceDetail =
           payload.contract_detail[0].service_detail.length > 0 &&
           payload.contract_detail[0].service_detail[0];

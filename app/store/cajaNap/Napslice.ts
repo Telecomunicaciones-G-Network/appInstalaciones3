@@ -4,12 +4,12 @@ import { Nap_box } from "../../core/Interfaces/Nap_box";
 
 export interface NapsliceInterface {
   isLoading: boolean;
-  nap_box: Nap_box | false;
+  napBox: any;
 }
 
 export const initialNapSlice: NapsliceInterface = {
   isLoading: false,
-  nap_box: false,
+  napBox: false,
 };
 
 export const Napslice = createSlice({
@@ -23,7 +23,9 @@ export const Napslice = createSlice({
       })
       .addCase(fetchNap_box.fulfilled, (state, { payload }) => {
         state.isLoading = false;
-        state.nap_box = payload;
+        console.log(payload);
+        
+        state.napBox = payload;
       });
   },
 });

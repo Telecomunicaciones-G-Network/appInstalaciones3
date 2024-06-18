@@ -1,8 +1,6 @@
 import { View, Text } from "react-native";
 import { HeadersCore } from "../components/HeadersCore";
 import { ListCore } from "../components/ListCore";
-import tw from "twrnc";
-import { useTheme } from "@ui-kitten/components";
 import { ModalFiltroFecha } from "../components/ModalFiltroFecha";
 import { Splash } from "../../helpers/Splash";
 import { useEffect } from "react";
@@ -12,6 +10,7 @@ import { fetchOpciones } from "../../store/instalacion/Thunks";
 import { SelectorInterface } from "../../interfaces/SelectorInterfaces";
 import { OrdenesParams } from "../class/OrdenesParams";
 
+
 export const CoreScreen = () => {
   const dispatch = useDispatch<any>();
   const params = new OrdenesParams();
@@ -20,11 +19,12 @@ export const CoreScreen = () => {
     dispatch(fetchOrdenes(params));
     dispatch(fetchOpciones());
   };
+  
 
   useEffect(() => {
     params.since = desde;
     params.until = hasta;
-    type && (params.type = type);
+    type && (params.status = type);
     getOrdenes(params);
   }, [desde, hasta, type]);
 

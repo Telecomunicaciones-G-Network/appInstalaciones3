@@ -76,6 +76,7 @@ export interface Contrato {
   }
 
   export interface ServiceDetail {
+    nap_id(nap_id: any): any
     contract_detail: number
     id: number
     ip: string

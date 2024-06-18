@@ -15,9 +15,14 @@ import { useDispatch } from "react-redux";
 import { mostrarCargando, ocultarCargando } from "../store/splash/splashSlice";
 import { coreApi } from "../api/CoreApi";
 import { MapsScreen } from "../core/screen/MapsScreen";
+import { resetDate } from "../store/core/coreSlice";
 const principal = createStackNavigator();
 
 export const RutasPrincipal = () => {
+  const theme = useTheme();
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+
   const saveStorage = async (key: any, value: any) => {
     const stringValue = JSON.stringify(value);
     await Storage.store(key, stringValue);
@@ -25,7 +30,6 @@ export const RutasPrincipal = () => {
 
   const refresh = async () => {
     Storage.get("refreshToken").then((d) => {
-      
       if (d) {
         coreApi
           .post("/refresh/", { refresh: JSON.parse(d) })
@@ -34,26 +38,33 @@ export const RutasPrincipal = () => {
             saveStorage("accessToken", AccessToken);
             saveStorage("refreshToken", RefreshToken);
           })
-          .catch((error) => console.log(error.response));
+          .catch((error) => {
+            if (error.response.status == 401) {
+              Storage.remove("accessToken");
+              Storage.remove("refreshToken");
+              Storage.remove("user");
+              navigation.reset({
+                index: 0,
+                routes: [{ name: "auth" as never }],
+              });
+            }
+            console.log(error.response);
+          });
       }
     });
   };
 
-  const dispatch = useDispatch();
   useEffect(() => {
     const interv = setInterval(() => {
       // Incrementar el contador en cada intervalo
       refresh();
-    }, 540000);
+    }, 50000);
     checkToken();
 
     return () => {
       clearInterval(interv);
     };
   }, []);
-
-  const theme = useTheme();
-  const navigation = useNavigation();
 
   const checkToken = async () => {
     dispatch(mostrarCargando());
@@ -68,6 +79,9 @@ export const RutasPrincipal = () => {
       dispatch(ocultarCargando());
     } catch (error) {
       console.error("Error al obtener el token del almacenamiento:", error);
+      Storage.remove("accessToken");
+      Storage.remove("refreshToken");
+      Storage.remove("user");
       navigation.reset({
         index: 0,
         routes: [{ name: "auth" as never }],
@@ -116,7 +130,15 @@ export const RutasPrincipal = () => {
             headerLeft: () => <CustomHeaderLeft />,
             headerRight: () => (
               <TouchableOpacity
-                onPress={() => navigation.navigate("auth" as never)} // Navegar a la pantalla de configuración
+                onPress={() => {
+                  Storage.remove("accessToken");
+                  Storage.remove("refreshToken");
+                  Storage.remove("user");
+                  navigation.reset({
+                    index: 0,
+                    routes: [{ name: "auth" as never }],
+                  });
+                }} // Navegar a la pantalla de configuración
                 style={{ marginRight: 10 }}
               >
                 <Ionicons
@@ -139,7 +161,16 @@ export const RutasPrincipal = () => {
             headerTintColor: "white",
             headerRight: () => (
               <TouchableOpacity
-                onPress={() => navigation.navigate("auth" as never)} // Navegar a la pantalla de configuración
+                onPress={() => {
+                  Storage.remove("accessToken");
+                  Storage.remove("refreshToken");
+                  Storage.remove("user");
+                  dispatch(resetDate())
+                  navigation.reset({
+                    index: 0,
+                    routes: [{ name: "auth" as never }],
+                  });
+                }} // Navegar a la pantalla de configuración
                 style={{ marginRight: 10 }}
               >
                 <Ionicons
@@ -154,8 +185,8 @@ export const RutasPrincipal = () => {
             headerShadowVisible: false,
           }}
         />
-        <principal.Group screenOptions={{presentation:'modal'}}>
-          <principal.Screen name="map" component={MapsScreen}/>
+        <principal.Group screenOptions={{ presentation: "modal" }}>
+          <principal.Screen name="map" component={MapsScreen} />
         </principal.Group>
       </principal.Navigator>
     </>

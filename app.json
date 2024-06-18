@@ -1,10 +1,11 @@
 {
   "expo": {
-    "name": "appInstalaciones2",
+    "name": "G-instalaciones",
     "slug": "appInstalaciones2",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "iconSize": 40,
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -19,13 +20,19 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
       },
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ],
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBF4NT7e6ZTx1qbo-_DzByCkBOYV-dNqY0"
+        }
+      },
       "package": "com.anonymous.appInstalaciones2"
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {

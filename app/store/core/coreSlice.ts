@@ -5,7 +5,7 @@ const fecha = new Date();
 const formate = `${fecha.getFullYear()}-${
   fecha.getMonth() + 1
 }-${fecha.getDate()}`;
-console.log(formate);
+
 
 export interface CoreSliceInterface {
   desde: string;
@@ -29,11 +29,16 @@ export const coreSlice = createSlice({
       state.desde = payload.since;
       state.hasta = payload.until;
     },
-    
+
+    resetDate(state){
+      console.log(formate);
+      state.desde = initialCoreSlice.desde;
+      state.hasta = initialCoreSlice.hasta;
+    },
     setType(state, { payload }) {
       state.type = payload;
     },
   },
 });
 
-export const { setFechaCore,  setType } = coreSlice.actions;
+export const { setFechaCore,  setType,resetDate } = coreSlice.actions;

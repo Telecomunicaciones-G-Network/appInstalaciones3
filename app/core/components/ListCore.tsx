@@ -2,7 +2,7 @@ import { Button, IconElement, Layout, List, ListItem } from "@ui-kitten/componen
 import { RefreshControl, Text, View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import tw from "twrnc";
-import { CommonActions, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { SearchCore } from "./SearchCore";
 import { SelectorInterface } from "../../interfaces/SelectorInterfaces";
@@ -26,6 +26,12 @@ export const ListCore = () => {
   const { isLoading, ordenes } = useSelector(
     (d: SelectorInterface) => d.ordenes
   );
+
+  
+  
+  
+  
+  
 
   const [refreshing, setRefreshing] = useState(false);
 
@@ -76,7 +82,7 @@ export const ListCore = () => {
 
   return (
     <View style={tw`flex-1 mt-[-5px]  rounded-t-lg`}>
-      <Layout style={tw`pt-2 pb-24 flex-1 px-2 rounded-lg bg-white`} level="2">
+      <Layout style={tw`pt-2 pb-2 flex-1 px-2 rounded-lg bg-white `} level="2">
         <SearchCore />
         {!isLoading && (
           <List
@@ -86,12 +92,12 @@ export const ListCore = () => {
                 onRefresh={onRefresh}
               />
             }
-            style={tw`p-1 bg-white`}
+            style={tw`p-1 bg-white `}
             data={ordenes}
             renderItem={renderItem}
           />
         )}
-      {!isLoading && ordenes.length == 0 && (
+      {!isLoading && !ordenes && (
         <View style={tw`flex-1  items-center`}>
           <Ionicons
             name="close-circle-outline"
