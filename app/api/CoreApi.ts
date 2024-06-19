@@ -30,7 +30,7 @@ coreApi.interceptors.response.use(
       ToastError("Server Internal Error (500)");
     }
     if (error.response.status == 0) {
-      ToastError("Error de conexion, intente nuevamente");
+      ToastError("Error de conexión, intente nuevamente");
     }
     // if (error.response.status == 401) {
     //   localStorage.clear();
