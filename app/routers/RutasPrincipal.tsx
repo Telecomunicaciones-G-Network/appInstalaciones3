@@ -12,6 +12,7 @@ import { coreApi } from "../api/CoreApi";
 import { AuthScreen } from "../auth/AuthScreen";
 import { theme } from "../../App";
 import { CoreRouters } from "../core/routers/CoreRouters";
+import { ClientScreen } from "../core/screens/Client/ClientScreen";
 
 const principal = createStackNavigator();
 
@@ -69,7 +70,7 @@ export const RutasPrincipal = () => {
       if (token) {
         navigation.reset({
           index: 0,
-          routes: [{ name: "core" as never }],
+          routes: [{ name: "client" as never }],
         });
       }
       dispatch(ocultarCargando());
@@ -104,12 +105,12 @@ export const RutasPrincipal = () => {
     <>
       <principal.Navigator>
         <principal.Screen
-          name="core"
-          component={CoreRouters}
+          name="client"
+          component={ClientScreen}
           options={{
             headerTitle: (props) => (
               <>
-                <Text style={[tw`text-xl`, { color: theme.colors.default }]}>
+                <Text style={[tw`text-xl`]}>
                   Grupo 1
                 </Text>
               </>
@@ -130,16 +131,53 @@ export const RutasPrincipal = () => {
                 <Ionicons
                   name="log-out-outline"
                   size={24}
-                  color={theme.colors.default}
+                  color={theme.colors.primary}
                   style={tw`mr-2`}
                 />
               </TouchableOpacity>
             ),
 
-            headerStyle: { backgroundColor: theme.colors.accent },
+            headerStyle: { backgroundColor: theme.colors.default },
             headerShadowVisible: false,
           }}
         />
+
+        <principal.Screen
+          name="core"
+          component={CoreRouters}
+          options={{
+            headerTitle: (props) => (
+              <>
+                <Text style={[tw`text-xl `]}>Grupo 1</Text>
+              </>
+            ),
+            headerRight: () => (
+              <TouchableOpacity
+                onPress={() => {
+                  Storage.remove("accessToken");
+                  Storage.remove("refreshToken");
+                  Storage.remove("user");
+                  navigation.reset({
+                    index: 0,
+                    routes: [{ name: "auth" as never }],
+                  });
+                }} // Navegar a la pantalla de configuración
+                style={{ marginRight: 10 }}
+              >
+                <Ionicons
+                  name="log-out-outline"
+                  size={24}
+                  color={theme.colors.primary}
+                  style={tw`mr-2`}
+                />
+              </TouchableOpacity>
+            ),
+
+            headerStyle: { backgroundColor: theme.colors.default },
+            headerShadowVisible: false,
+          }}
+        />
+
         <principal.Screen
           name="auth"
           component={AuthScreen}

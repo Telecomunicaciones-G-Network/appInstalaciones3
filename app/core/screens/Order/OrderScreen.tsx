@@ -9,11 +9,13 @@ import tw from "twrnc";
 import { CardOrden } from "./components/CardOrden";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { InfoOrden } from "./components/InfoOrden";
+import { OptionsOrden } from "./components/OptionsOrden";
+import { ButtonConfirmOrden } from "./components/ButtonConfirmOrden";
+import { DoesNotHaveOrders } from "./components/DoesNotHaveOrders";
 
 export const OrderScreen = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { ordenes } = useSelector((d: RootState) => d.ordenes);
-
   useEffect(() => {
     dispatch(
       fetchOrdenes({
@@ -22,7 +24,9 @@ export const OrderScreen = () => {
     );
   }, []);
   return (
-    <View style={tw`mx-2 `}>
+    <View
+      style={[tw`px-2 `, { flex: 1, backgroundColor: theme.colors.default }]}
+    >
       <View style={[tw`h-12 flex  pt-4 justify-between`]}>
         <View style={tw`flex-row`}>
           <FontAwesome6
@@ -35,9 +39,16 @@ export const OrderScreen = () => {
           </Text>
         </View>
       </View>
-
-      <CardOrden />
-      <InfoOrden />
+      {ordenes.length == 0 ? (
+        <DoesNotHaveOrders />
+      ) : (
+        <>
+          <CardOrden />
+          <InfoOrden />
+          <OptionsOrden />
+          <ButtonConfirmOrden />
+        </>
+      )}
     </View>
   );
 };

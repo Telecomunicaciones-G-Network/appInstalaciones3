@@ -15,6 +15,7 @@ export const theme = {
     primary: "#e61919", // Color primario
     accent: "#262626", // Color de acento
     secondary:'#9ca3af',
+    success:'#2ECC71',
     default: '#e4e4e7', // Color de fondo
     // surface: '#ffffff', // Color de superficie
     // text: '#333333', // Color del texto

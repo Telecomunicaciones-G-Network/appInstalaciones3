@@ -7,42 +7,61 @@ export const InfoOrden = () => {
   return (
     <View>
       <View>
-        <Text style={tw`mt-7 text-xl font-semibold text-center`}>Información del cliente</Text>
+        <Text style={tw`mt-5 text-xl font-semibold text-center`}>
+          Información del cliente
+        </Text>
       </View>
       <View
         style={[
-          tw`mt-2 border-b-2 `,
+          tw`mt-2  bg-white shadow-md rounded-xl `,
           { borderBottomColor: theme.colors.default },
         ]}
       >
         <List.Item
-          title="Cliente"
+          title={() => (
+            <Text style={{ color: theme.colors.secondary }}>Cliente</Text>
+          )}
           description="Item description"
-          right={(props) => <List.Icon {...props} icon="account" />}
+          right={(props) => (
+            <List.Icon {...props} icon="account" color={theme.colors.primary} />
+          )}
         />
       </View>
       <View
         style={[
-          tw`mt-2 border-b-2 `,
+          tw`mt-2  bg-white shadow-md rounded-xl `,
           { borderBottomColor: theme.colors.default },
         ]}
       >
         <List.Item
-          title="Dirección"
+          title={() => (
+            <Text style={{ color: theme.colors.secondary }}>Dirección</Text>
+          )}
           description="Item description"
-          right={(props) => <List.Icon {...props} icon="map-marker" />}
+          right={(props) => (
+            <List.Icon
+              {...props}
+              icon="map-marker"
+              color={theme.colors.primary}
+            />
+          )}
         />
       </View>
       <View
         style={[
-          tw`mt-2 border-b-2 `,
+          tw`mt-2  bg-white shadow-md rounded-xl `,
           { borderBottomColor: theme.colors.default },
         ]}
       >
         <List.Item
-          title="Telefono"
+          
+          title={() => (
+            <Text style={{ color: theme.colors.secondary }}>Teléfono</Text>
+          )}
           description="Item description"
-          right={(props) => <List.Icon {...props} icon="phone" />}
+          right={(props) => (
+            <List.Icon {...props} icon="phone" color={theme.colors.primary} />
+          )}
         />
       </View>
     </View>
