@@ -4,12 +4,18 @@ import { initialStateOrden } from "./OrdenSlices";
 import { initialStateOrdenId } from "./OrdenIdSlices";
 
 export const fetchOrdenes = createAsyncThunk("orden", async (params?: any) => {
+  
+  console.log(params);
+  
   return coreApi
-    .get("/api/gsoft/installations/orders/", {
-      params,
-    })
+    .get("/api/gsoft/installations/orders/", {params})
     .then(({ data, status }) => {
+      
       if (status == 200) {
+        console.log('====================================');
+        console.log(JSON.stringify(data));
+        console.log('====================================');
+        
         return data;
       }
       return initialStateOrden;
@@ -26,7 +32,6 @@ export const fetchIdOrden = createAsyncThunk(
       .get(`/api/gsoft/installations/orders/${id}/`)
       .then(({ data, status }) => {
         if (status == 200) {
-
           return data;
         }
         return initialStateOrdenId;

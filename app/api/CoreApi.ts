@@ -3,7 +3,8 @@ import { ToastError } from "../libs/Toast";
 import Storage from "../libs/storage";
 
 export const coreApi = axios.create({
-  baseURL: "https://core.gsoft.app",
+  //baseURL: "https://core.gsoft.app",
+  baseURL: "http://192.168.196.205:8080",
 });
 
 coreApi.interceptors.request.use(async(config) => {

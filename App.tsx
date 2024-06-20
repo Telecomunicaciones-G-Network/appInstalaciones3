@@ -1,31 +1,39 @@
-import 'react-native-gesture-handler';
-import { ApplicationProvider} from "@ui-kitten/components";
-import { NavigationContainer } from '@react-navigation/native';
-import * as eva from "@eva-design/eva";
+import "react-native-gesture-handler";
+import { NavigationContainer } from "@react-navigation/native";
+import { PaperProvider, DefaultTheme } from "react-native-paper";
+import { RutasPrincipal } from "./app/routers/RutasPrincipal";
+import Toast from "react-native-toast-message";
+import { Splash } from "./app/helpers/Splash";
+import { Provider } from "react-redux";
+import { store } from "./app/store/store";
+import { Cargando } from "./app/components/Cargando";
 
-
-import { useState } from "react";
-import { RutasPrincipal } from './app/routers/RutasPrincipal';
-import Toast from 'react-native-toast-message';
-import {default as theme} from './custom-theme.json'
-import { Splash } from './app/helpers/Splash';
-import { Provider } from 'react-redux';
-import { store } from './app/store/store';
-
-
-
+export const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: "#e61919", // Color primario
+    accent: "#262626", // Color de acento
+    secondary:'#9ca3af',
+    default: '#e4e4e7', // Color de fondo
+    // surface: '#ffffff', // Color de superficie
+    // text: '#333333', // Color del texto
+    // placeholder: '#aaaaaa', // Color del placeholder
+    // disabled: '#cccccc', // Color de componentes deshabilitados
+    // notification: '#ff0000', // Color de notificaciones
+  },
+};
 
 export default function App() {
   return (
-    <ApplicationProvider {...eva} theme={{...eva.light,...theme}}>
+    <PaperProvider theme={theme}>
       <Provider store={store}>
-       <NavigationContainer onReady={()=><Splash/>}>
-        <RutasPrincipal/>
-        <Splash/>
-        <Toast />
-       </NavigationContainer>
+        <NavigationContainer onReady={() => <Cargando />}>
+          <RutasPrincipal />
+          <Cargando />
+          <Toast />
+        </NavigationContainer>
       </Provider>
-    </ApplicationProvider>
+    </PaperProvider>
   );
 }
-

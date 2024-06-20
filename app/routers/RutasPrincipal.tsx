@@ -1,25 +1,21 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { Image, Text, View } from "react-native";
-import { AuthScreen } from "../auth/screen/AuthScreen";
-import { CoreScreen } from "../core/screen/CoreScreen";
-import { useTheme } from "@ui-kitten/components";
+import { Image, Text } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import tw from "twrnc";
 import { useEffect } from "react";
-import { CoreRouters } from "../core/routers/CoreRouters";
-import { MenuOver } from "../core/components/MenuOver";
 import Storage from "../libs/storage";
 import { useDispatch } from "react-redux";
 import { mostrarCargando, ocultarCargando } from "../store/splash/splashSlice";
 import { coreApi } from "../api/CoreApi";
-import { MapsScreen } from "../core/screen/MapsScreen";
-import { resetDate } from "../store/core/coreSlice";
+import { AuthScreen } from "../auth/AuthScreen";
+import { theme } from "../../App";
+import { CoreRouters } from "../core/routers/CoreRouters";
+
 const principal = createStackNavigator();
 
 export const RutasPrincipal = () => {
-  const theme = useTheme();
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
@@ -98,23 +94,52 @@ export const RutasPrincipal = () => {
           width: 100,
           height: 40,
           resizeMode: "contain",
-          marginLeft: 90,
         }}
         source={require("../../assets/img/morden-logo2.png")}
       />
     );
   };
 
-  const CustomHeaderLeft = () => {
-    return (
-      <View style={tw`ml-5`}>
-        <MenuOver />
-      </View>
-    );
-  };
   return (
     <>
       <principal.Navigator>
+        <principal.Screen
+          name="core"
+          component={CoreRouters}
+          options={{
+            headerTitle: (props) => (
+              <>
+                <Text style={[tw`text-xl`, { color: theme.colors.default }]}>
+                  Grupo 1
+                </Text>
+              </>
+            ),
+            headerRight: () => (
+              <TouchableOpacity
+                onPress={() => {
+                  Storage.remove("accessToken");
+                  Storage.remove("refreshToken");
+                  Storage.remove("user");
+                  navigation.reset({
+                    index: 0,
+                    routes: [{ name: "auth" as never }],
+                  });
+                }} // Navegar a la pantalla de configuración
+                style={{ marginRight: 10 }}
+              >
+                <Ionicons
+                  name="log-out-outline"
+                  size={24}
+                  color={theme.colors.default}
+                  style={tw`mr-2`}
+                />
+              </TouchableOpacity>
+            ),
+
+            headerStyle: { backgroundColor: theme.colors.accent },
+            headerShadowVisible: false,
+          }}
+        />
         <principal.Screen
           name="auth"
           component={AuthScreen}
@@ -122,72 +147,6 @@ export const RutasPrincipal = () => {
             headerShown: false,
           }}
         />
-        <principal.Screen
-          name="core"
-          component={CoreScreen}
-          options={{
-            headerTitle: (props) => <LogoTitle />,
-            headerLeft: () => <CustomHeaderLeft />,
-            headerRight: () => (
-              <TouchableOpacity
-                onPress={() => {
-                  Storage.remove("accessToken");
-                  Storage.remove("refreshToken");
-                  Storage.remove("user");
-                  navigation.reset({
-                    index: 0,
-                    routes: [{ name: "auth" as never }],
-                  });
-                }} // Navegar a la pantalla de configuración
-                style={{ marginRight: 10 }}
-              >
-                <Ionicons
-                  name="log-out-outline"
-                  size={24}
-                  color="white"
-                  style={tw`mr-2`}
-                />
-              </TouchableOpacity>
-            ),
-            headerStyle: { backgroundColor: theme["color-primary-500"] },
-            headerShadowVisible: false,
-          }}
-        />
-        <principal.Screen
-          name="client"
-          component={CoreRouters}
-          options={{
-            headerTitle: (props) => <Text></Text>,
-            headerTintColor: "white",
-            headerRight: () => (
-              <TouchableOpacity
-                onPress={() => {
-                  Storage.remove("accessToken");
-                  Storage.remove("refreshToken");
-                  Storage.remove("user");
-                  dispatch(resetDate())
-                  navigation.reset({
-                    index: 0,
-                    routes: [{ name: "auth" as never }],
-                  });
-                }} // Navegar a la pantalla de configuración
-                style={{ marginRight: 10 }}
-              >
-                <Ionicons
-                  name="log-out-outline"
-                  size={24}
-                  color="white"
-                  style={tw`mr-2`}
-                />
-              </TouchableOpacity>
-            ),
-            headerStyle: { backgroundColor: theme["color-primary-500"] },
-            headerShadowVisible: false,
-          }}
-        />
-        <principal.Group screenOptions={{ presentation: "modal" }}>
-          <principal.Screen name="map" component={MapsScreen} />
-        </principal.Group>
       </principal.Navigator>
     </>
   );
