@@ -13,6 +13,7 @@ import { AuthScreen } from "../auth/AuthScreen";
 import { theme } from "../../App";
 import { CoreRouters } from "../core/routers/CoreRouters";
 import { ClientScreen } from "../core/screens/Client/ClientScreen";
+import { MyLocation } from "../core/components/MyLocation";
 
 const principal = createStackNavigator();
 
@@ -150,11 +151,7 @@ export const RutasPrincipal = () => {
           name="client"
           component={ClientScreen}
           options={{
-            headerTitle: (props) => (
-              <>
-                <Text style={[tw`text-xl`]}>Grupo 1</Text>
-              </>
-            ),
+            headerTitle: (props) => <MyLocation />,
             headerRight: () => (
               <TouchableOpacity
                 onPress={() => {

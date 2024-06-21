@@ -12,10 +12,11 @@ import { InfoOrden } from "./components/InfoOrden";
 import { OptionsOrden } from "./components/OptionsOrden";
 import { ButtonConfirmOrden } from "./components/ButtonConfirmOrden";
 import { DoesNotHaveOrders } from "./components/DoesNotHaveOrders";
+import { LoadingSpinner } from "../../../components/LoadingSpinner";
 
 export const OrderScreen = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { ordenes } = useSelector((d: RootState) => d.ordenes);
+  const { ordenes, isLoading } = useSelector((d: RootState) => d.ordenes);
   useEffect(() => {
     dispatch(
       fetchOrdenes({
@@ -39,7 +40,9 @@ export const OrderScreen = () => {
           </Text>
         </View>
       </View>
-      {ordenes.length == 0 ? (
+      {isLoading ? (
+        <LoadingSpinner/>
+      ) : ordenes.length == 0 ? (
         <DoesNotHaveOrders />
       ) : (
         <>
