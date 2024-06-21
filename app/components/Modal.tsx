@@ -7,7 +7,7 @@ interface Props {
   isVisible: boolean;
   onChange: (e: boolean) => void;
   message: string | React.ReactNode;
-  title: string | React.ReactNode;
+  title?: string | React.ReactNode;
   actions?: React.ReactNode | JSX.Element | React.ReactElement;
 }
 

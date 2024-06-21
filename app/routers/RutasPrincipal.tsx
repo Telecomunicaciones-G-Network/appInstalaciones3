@@ -105,43 +105,12 @@ export const RutasPrincipal = () => {
     <>
       <principal.Navigator>
         <principal.Screen
-          name="client"
-          component={ClientScreen}
+          name="auth"
+          component={AuthScreen}
           options={{
-            headerTitle: (props) => (
-              <>
-                <Text style={[tw`text-xl`]}>
-                  Grupo 1
-                </Text>
-              </>
-            ),
-            headerRight: () => (
-              <TouchableOpacity
-                onPress={() => {
-                  Storage.remove("accessToken");
-                  Storage.remove("refreshToken");
-                  Storage.remove("user");
-                  navigation.reset({
-                    index: 0,
-                    routes: [{ name: "auth" as never }],
-                  });
-                }} // Navegar a la pantalla de configuración
-                style={{ marginRight: 10 }}
-              >
-                <Ionicons
-                  name="log-out-outline"
-                  size={24}
-                  color={theme.colors.primary}
-                  style={tw`mr-2`}
-                />
-              </TouchableOpacity>
-            ),
-
-            headerStyle: { backgroundColor: theme.colors.default },
-            headerShadowVisible: false,
+            headerShown: false,
           }}
         />
-
         <principal.Screen
           name="core"
           component={CoreRouters}
@@ -177,12 +146,39 @@ export const RutasPrincipal = () => {
             headerShadowVisible: false,
           }}
         />
-
         <principal.Screen
-          name="auth"
-          component={AuthScreen}
+          name="client"
+          component={ClientScreen}
           options={{
-            headerShown: false,
+            headerTitle: (props) => (
+              <>
+                <Text style={[tw`text-xl`]}>Grupo 1</Text>
+              </>
+            ),
+            headerRight: () => (
+              <TouchableOpacity
+                onPress={() => {
+                  Storage.remove("accessToken");
+                  Storage.remove("refreshToken");
+                  Storage.remove("user");
+                  navigation.reset({
+                    index: 0,
+                    routes: [{ name: "auth" as never }],
+                  });
+                }} // Navegar a la pantalla de configuración
+                style={{ marginRight: 10 }}
+              >
+                <Ionicons
+                  name="log-out-outline"
+                  size={24}
+                  color={theme.colors.primary}
+                  style={tw`mr-2`}
+                />
+              </TouchableOpacity>
+            ),
+
+            headerStyle: { backgroundColor: theme.colors.default },
+            headerShadowVisible: false,
           }}
         />
       </principal.Navigator>

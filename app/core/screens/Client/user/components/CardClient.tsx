@@ -3,14 +3,15 @@ import tw from "twrnc";
 
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { theme } from "../../../../../App";
+
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import { theme } from "../../../../../../App";
 
 export const CardClient = () => {
   return (
     <View style={tw`mt-3`}>
       
-      <Text style={[tw`text-gray-400 text-lg`,{alignSelf:'flex-end'}]}>Acciones</Text>
+      <Text style={[tw`text-gray-400 text-sm`,{alignSelf:'flex-end'}]}>Acciones</Text>
       <View style={[tw`items-center justify-center`, styles.container]}>
         <TouchableOpacity
           style={[
@@ -66,7 +67,8 @@ const styles = StyleSheet.create({
   imageContainer: {
     width: "100%",
     marginBottom: 8,
-    padding: 24,
+    paddingVertical: 10,
+    paddingHorizontal: 25,
     backgroundColor: 'white',
   },
 });

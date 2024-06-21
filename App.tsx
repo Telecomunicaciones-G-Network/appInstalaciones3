@@ -3,10 +3,10 @@ import { NavigationContainer } from "@react-navigation/native";
 import { PaperProvider, DefaultTheme } from "react-native-paper";
 import { RutasPrincipal } from "./app/routers/RutasPrincipal";
 import Toast from "react-native-toast-message";
-import { Splash } from "./app/helpers/Splash";
 import { Provider } from "react-redux";
 import { store } from "./app/store/store";
 import { Cargando } from "./app/components/Cargando";
+
 
 export const theme = {
   ...DefaultTheme,
@@ -16,7 +16,7 @@ export const theme = {
     accent: "#262626", // Color de acento
     secondary:'#9ca3af',
     success:'#2ECC71',
-    default: '#e4e4e7', // Color de fondo
+    default: '#e5e7eb', // Color de fondo
     // surface: '#ffffff', // Color de superficie
     // text: '#333333', // Color del texto
     // placeholder: '#aaaaaa', // Color del placeholder

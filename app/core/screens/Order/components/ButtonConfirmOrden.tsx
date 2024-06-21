@@ -22,9 +22,10 @@ export const ButtonConfirmOrden = () => {
       <Button
         mode="contained"
         style={[
-          tw`h-11`,
-          { backgroundColor: theme.colors.success, justifyContent: "center" },
+          tw`h-11 rounded-lg`,
+          { backgroundColor: theme.colors.success, justifyContent: "center", },
         ]}
+        
         icon={() => (
           <FontAwesome6 name="circle-check" size={20} color="white" />
         )}
@@ -39,7 +40,7 @@ export const ButtonConfirmOrden = () => {
         onChange={setVisible}
         actions={
           <>
-            <Button mode="contained" onPress={handleConfirm}>
+            <Button mode="contained"   onPress={handleConfirm}>
               Aceptar
             </Button>
           </>

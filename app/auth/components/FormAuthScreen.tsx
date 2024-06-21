@@ -96,7 +96,7 @@ export const FormAuthScreen = ({ Ingresar }: Props) => {
         icon="login"
         mode="contained"
         onPress={handleSubmit(onSubmit)}
-        style={tw`w-full `}
+        style={tw`w-full rounded-lg`}
       >
         Ingresar
       </Button>

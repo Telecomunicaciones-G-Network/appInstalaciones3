@@ -7,7 +7,7 @@ export const InfoOrden = () => {
   return (
     <View>
       <View>
-        <Text style={tw`mt-5 text-xl font-semibold text-center`}>
+        <Text style={tw`mt-5 text-lg font-semibold text-gray-400`}>
           Información del cliente
         </Text>
       </View>

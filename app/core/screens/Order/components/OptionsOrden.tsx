@@ -93,6 +93,6 @@ const styles = StyleSheet.create({
   imageContainer: {
     width: "32%",
     marginBottom: 8,
-    padding: 15,
+    padding: 7,
   },
 });

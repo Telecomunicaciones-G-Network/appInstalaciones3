@@ -7,7 +7,7 @@ export const AvatarClient = () => {
     <View style={tw`flex-row mx-3 items-center mt-3`}>
       <View style={tw`shadow-md rounded-full `}>
         <Image
-          source={require("../../../../../assets/img/usuario_(1).png")}
+          source={require("../../../../../../assets/img/usuario_(1).png")}
           style={[tw`h-20 w-20 `]}
         />
       </View>
