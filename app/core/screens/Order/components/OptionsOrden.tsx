@@ -13,11 +13,14 @@ import { theme } from "../../../../../App";
 import { Button, Modal, Portal } from "react-native-paper";
 import { useState } from "react";
 import { ModalComponent } from "../../../../components/Modal";
+import { useNavigation } from "@react-navigation/native";
 
 export const OptionsOrden = () => {
   const [visible, setVisible] = useState(false);
-  const handleCancel = (item: any) => {
-    console.log(`Presionaste la imagen ${item.id}`);
+  const navigation = useNavigation();
+  const handleCancel = () => {
+    navigation.navigate('option' as never)
+    setVisible(false);
   };
   return (
     <View style={styles.container}>
@@ -72,7 +75,7 @@ export const OptionsOrden = () => {
             </Button>
             <Button
               mode="contained"
-              onPress={() => setVisible(false)}
+              onPress={handleCancel }
             >
               Confirmar
             </Button>

@@ -11,7 +11,9 @@ export const ListNapBoxClient = () => {
     <View>
       <View style={tw`bg-white rounded-xl shadow-md mb-2`}>
         <List.Item
-          title="Sector"
+          title={() => (
+            <Text style={{ color: theme.colors.secondary }}>Sector</Text>
+          )}
           description="20"
           right={(props) => (
             <List.Icon
@@ -24,7 +26,11 @@ export const ListNapBoxClient = () => {
       </View>
       <View style={tw`bg-white rounded-xl shadow-md`}>
         <List.Item
-          title="Puertos Ocupado"
+          title={() => (
+            <Text style={{ color: theme.colors.secondary }}>
+              Puertos Ocupado
+            </Text>
+          )}
           description="20"
           right={(props) => (
             <List.Icon {...props} icon="cancel" color={theme.colors.primary} />
@@ -33,7 +39,9 @@ export const ListNapBoxClient = () => {
       </View>
       <View style={tw`bg-white rounded-xl shadow-md my-2`}>
         <List.Item
-          title="Coordenada"
+          title={() => (
+            <Text style={{ color: theme.colors.secondary }}>Coordenada</Text>
+          )}
           description="Item description"
           right={(props) => (
             <List.Icon
@@ -46,7 +54,9 @@ export const ListNapBoxClient = () => {
       </View>
       <View style={tw`bg-white rounded-xl shadow-md `}>
         <List.Item
-          title="Detalles"
+          title={() => (
+            <Text style={{ color: theme.colors.secondary }}>Detalles</Text>
+          )}
           description="Lorem ipsum dolor sit "
           onPress={() => setVisible(true)}
           right={(props) => (

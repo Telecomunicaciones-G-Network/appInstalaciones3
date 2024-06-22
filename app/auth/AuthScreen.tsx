@@ -25,9 +25,9 @@ export const AuthScreen = () => {
 
   const handleLogin = (body: any) => {
     dispatch(mostrarCargando());
-    console.log('====================================');
+    console.log("====================================");
     console.log(body);
-    console.log('====================================');
+    console.log("====================================");
     authApi
       .post("/login/", body)
       .then(({ data }) => {
@@ -59,7 +59,7 @@ export const AuthScreen = () => {
         style={styles.background}
       >
         <View style={tw`flex-1 relative`}>
-          <View style={tw`absolute top-12 left-22`}>
+          <View style={tw`items-center mt-20`}>
             <Image
               source={require("../../assets/img/morden-logo2.png")}
               style={tw`h-32 w-50`}

@@ -14,6 +14,8 @@ import { theme } from "../../App";
 import { CoreRouters } from "../core/routers/CoreRouters";
 import { ClientScreen } from "../core/screens/Client/ClientScreen";
 import { MyLocation } from "../core/components/MyLocation";
+import { ImageScreen } from "../core/screens/image/ImageScreen";
+import { OptionScreen } from "../core/screens/options/OptionScreen";
 
 const principal = createStackNavigator();
 
@@ -71,7 +73,7 @@ export const RutasPrincipal = () => {
       if (token) {
         navigation.reset({
           index: 0,
-          routes: [{ name: "client" as never }],
+          routes: [{ name: "option" as never }],
         });
       }
       dispatch(ocultarCargando());
@@ -178,6 +180,40 @@ export const RutasPrincipal = () => {
             headerShadowVisible: false,
           }}
         />
+        <principal.Screen
+          name="option"
+          component={OptionScreen}
+          options={{
+            // headerTitle: (props) =><> </>,
+            headerRight: () => (
+              <TouchableOpacity
+                onPress={() => {
+                  Storage.remove("accessToken");
+                  Storage.remove("refreshToken");
+                  Storage.remove("user");
+                  navigation.reset({
+                    index: 0,
+                    routes: [{ name: "auth" as never }],
+                  });
+                }} // Navegar a la pantalla de configuración
+                style={{ marginRight: 10 }}
+              >
+                <Ionicons
+                  name="log-out-outline"
+                  size={24}
+                  color={theme.colors.primary}
+                  style={tw`mr-2`}
+                />
+              </TouchableOpacity>
+            ),
+
+            
+            headerShadowVisible: false,
+          }}
+        />
+        <principal.Group screenOptions={{ presentation: "card" }}>
+          <principal.Screen name="image" component={ImageScreen} />
+        </principal.Group>
       </principal.Navigator>
     </>
   );

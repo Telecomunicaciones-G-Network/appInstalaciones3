@@ -49,7 +49,7 @@ export const NapBoxClient = () => {
             }
           />
         </View>
-        <View style={tw`bg-white h-45 rounded-xl p-2 mb-4`}>
+        <View style={tw`bg-white h-50 rounded-xl p-2 mb-4`}>
           <MapNapBoxClient />
         </View>
         <ListNapBoxClient />
