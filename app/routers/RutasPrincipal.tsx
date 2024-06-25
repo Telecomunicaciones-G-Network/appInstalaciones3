@@ -48,7 +48,7 @@ export const RutasPrincipal = () => {
                 routes: [{ name: "auth" as never }],
               });
             }
-            console.log(error.response);
+            
           });
       }
     });
@@ -73,12 +73,11 @@ export const RutasPrincipal = () => {
       if (token) {
         navigation.reset({
           index: 0,
-          routes: [{ name: "option" as never }],
+          routes: [{ name: "client" as never }],
         });
       }
       dispatch(ocultarCargando());
     } catch (error) {
-      console.error("Error al obtener el token del almacenamiento:", error);
       Storage.remove("accessToken");
       Storage.remove("refreshToken");
       Storage.remove("user");

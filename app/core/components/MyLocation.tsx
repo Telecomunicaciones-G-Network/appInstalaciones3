@@ -36,11 +36,9 @@ export const MyLocation = () => {
   }, [animation]);
 
   useEffect(() => {
-    let interval;
-    // Configurar el intervalo para obtener la ubicación cada 3 minutos
-    interval = setInterval(getLocation, 120000);
-    // Limpiar el intervalo cuando el componente se desmonte
-    return () => clearInterval(interval);
+    // let interval;
+    // interval = setInterval(getLocation, 120000);
+    // return () => clearInterval(interval);
   }, []);
 
   return (

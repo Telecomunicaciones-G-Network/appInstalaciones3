@@ -31,7 +31,6 @@ export const coreSlice = createSlice({
     },
 
     resetDate(state){
-      console.log(formate);
       state.desde = initialCoreSlice.desde;
       state.hasta = initialCoreSlice.hasta;
     },

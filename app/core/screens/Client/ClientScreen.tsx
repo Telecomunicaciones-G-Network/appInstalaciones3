@@ -8,8 +8,12 @@ import { ImageClient } from "./image/ImageClient";
 import { NapBoxClient } from "./NapBox/NapBoxClient";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
+
 const Tab = createBottomTabNavigator();
 export const ClientScreen = () => {
+  
+  
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({

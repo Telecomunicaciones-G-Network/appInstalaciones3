@@ -4,8 +4,6 @@ import { initialStateOrden } from "./OrdenSlices";
 import { initialStateOrdenId } from "./OrdenIdSlices";
 
 export const fetchOrdenes = createAsyncThunk("orden", async (params?: any) => {
-  console.log(params);
-
   return coreApi
     .get("/api/gsoft/installations/orders/", { params })
     .then(({ data, status }) => {
@@ -31,9 +29,16 @@ export const fetchIdOrden = createAsyncThunk(
         return initialStateOrdenId;
       })
       .catch((err) => {
-        console.log(err.response);
-
+        
         return initialStateOrdenId;
       });
   }
 );
+
+export const postOrdenValid = (body: any) => {
+  return coreApi.post(`/api/gsoft/installations/groups-fallow/`, body);
+};
+
+export const patchOrdenFallow = (body: any) => {
+  return coreApi.patch(`/api/gsoft/installations/groups-fallow/`, body);
+};

@@ -5,9 +5,14 @@ import { theme } from "../../../../../../App";
 import { ScrollView } from "react-native-gesture-handler";
 import { ModalComponent } from "../../../../../components/Modal";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../../store/store";
+import moment from "moment";
 
 export const DetailCliente = () => {
+  const { contrato } = useSelector((d: RootState) => d.contratoID);
   const [visible, setVisible] = useState(false);
+
   return (
     <View style={tw`mt-4`}>
       <Text style={[tw`text-gray-400 text-sm `, { alignSelf: "flex-end" }]}>
@@ -20,8 +25,10 @@ export const DetailCliente = () => {
               Orden de instalación
             </Text>
           )}
-          description="Item description"
-          right={(props) => (
+          description={
+            contrato?.installation_order ?? "No posee orden de instalación "
+          }
+          left={(props) => (
             <List.Icon
               {...props}
               icon="tag-multiple"
@@ -34,11 +41,15 @@ export const DetailCliente = () => {
         <List.Item
           title={() => (
             <Text style={{ color: theme.colors.secondary }}>
-              Fecha de agendado
+              Fecha de creación
             </Text>
           )}
-          description="Item description"
-          right={(props) => (
+          description={
+            contrato?.created_at
+              ? moment(contrato?.created_at).format("DD-MM-YYYY")
+              : "No posee fecha de creación "
+          }
+          left={(props) => (
             <List.Icon
               {...props}
               icon="calendar-range"
@@ -52,8 +63,8 @@ export const DetailCliente = () => {
           title={() => (
             <Text style={{ color: theme.colors.secondary }}>Teléfono</Text>
           )}
-          description="Item description"
-          right={(props) => (
+          description={contrato?.client_phone ?? "No posee teléfono "}
+          left={(props) => (
             <List.Icon {...props} icon="phone" color={theme.colors.primary} />
           )}
         />
@@ -63,8 +74,12 @@ export const DetailCliente = () => {
           title={() => (
             <Text style={{ color: theme.colors.secondary }}>Coordenadas</Text>
           )}
-          description="Item description"
-          right={(props) => (
+          description={
+            contrato
+              ? `${contrato.latitude}, ${contrato.longitude}`
+              : "No posee coordenadas "
+          }
+          left={(props) => (
             <List.Icon
               {...props}
               icon="map-marker-radius"
@@ -78,9 +93,9 @@ export const DetailCliente = () => {
           title={() => (
             <Text style={{ color: theme.colors.secondary }}>Ubicación</Text>
           )}
-          description="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga, aspernatur saepe doloremque quisquam omnis iste provident voluptatibus nihil? Consectetur officiis eius, impedit deleniti corrupti facilis doloremque laboriosam ullam doloribus quos."
-          onPress={()=>setVisible(true)}
-          right={(props) => (
+          description={contrato?.address??'No posee ubicación '}
+          onPress={() => setVisible(true)}
+          left={(props) => (
             <List.Icon
               {...props}
               icon="map-marker-path"
@@ -93,14 +108,7 @@ export const DetailCliente = () => {
           title="Ubicación"
           message={
             <Text style={tw`text-lg`}>
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-              Inventore a ea, recusandae, ipsam commodi minima neque ex facere
-              corrupti est sit accusamus earum molestiae magnam eaque. Nisi
-              tenetur reiciendis recusandae. Quia recusandae a dolorum facilis
-              asperiores provident suscipit ipsum officiis animi, repudiandae
-              rerum, sequi quos? Quod veritatis illum culpa doloremque inventore
-              iste. Labore saepe alias molestiae consequatur laudantium
-              quibusdam eaque.
+              {contrato?.address??'No posee ubicación '}
             </Text>
           }
           onChange={setVisible}

@@ -25,9 +25,7 @@ export const AuthScreen = () => {
 
   const handleLogin = (body: any) => {
     dispatch(mostrarCargando());
-    console.log("====================================");
-    console.log(body);
-    console.log("====================================");
+    
     authApi
       .post("/login/", body)
       .then(({ data }) => {

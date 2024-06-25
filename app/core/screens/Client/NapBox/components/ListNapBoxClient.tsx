@@ -4,9 +4,12 @@ import tw from "twrnc";
 import { theme } from "../../../../../../App";
 import { ModalComponent } from "../../../../../components/Modal";
 import { useState } from "react";
+import { RootState } from "../../../../../store/store";
+import { useSelector } from "react-redux";
 
 export const ListNapBoxClient = () => {
   const [visible, setVisible] = useState(false);
+  const { isLoading, napBox } = useSelector((d: RootState) => d.nap_box);
   return (
     <View>
       <View style={tw`bg-white rounded-xl shadow-md mb-2`}>
@@ -14,8 +17,8 @@ export const ListNapBoxClient = () => {
           title={() => (
             <Text style={{ color: theme.colors.secondary }}>Sector</Text>
           )}
-          description="20"
-          right={(props) => (
+          description={napBox.sector_name}
+          left={(props) => (
             <List.Icon
               {...props}
               icon="crosshairs"
@@ -32,7 +35,7 @@ export const ListNapBoxClient = () => {
             </Text>
           )}
           description="20"
-          right={(props) => (
+          left={(props) => (
             <List.Icon {...props} icon="cancel" color={theme.colors.primary} />
           )}
         />
@@ -42,8 +45,8 @@ export const ListNapBoxClient = () => {
           title={() => (
             <Text style={{ color: theme.colors.secondary }}>Coordenada</Text>
           )}
-          description="Item description"
-          right={(props) => (
+          description={napBox.coordinate}
+          left={(props) => (
             <List.Icon
               {...props}
               icon="map-marker-radius"
@@ -57,9 +60,9 @@ export const ListNapBoxClient = () => {
           title={() => (
             <Text style={{ color: theme.colors.secondary }}>Detalles</Text>
           )}
-          description="Lorem ipsum dolor sit "
+          description={napBox.detail}
           onPress={() => setVisible(true)}
-          right={(props) => (
+          left={(props) => (
             <List.Icon
               {...props}
               icon="information"
@@ -72,14 +75,7 @@ export const ListNapBoxClient = () => {
           title="Detalles"
           message={
             <Text style={tw`text-lg`}>
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-              Inventore a ea, recusandae, ipsam commodi minima neque ex facere
-              corrupti est sit accusamus earum molestiae magnam eaque. Nisi
-              tenetur reiciendis recusandae. Quia recusandae a dolorum facilis
-              asperiores provident suscipit ipsum officiis animi, repudiandae
-              rerum, sequi quos? Quod veritatis illum culpa doloremque inventore
-              iste. Labore saepe alias molestiae consequatur laudantium
-              quibusdam eaque.
+              {napBox.detail}
             </Text>
           }
           onChange={setVisible}

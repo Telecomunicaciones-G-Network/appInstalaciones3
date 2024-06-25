@@ -14,12 +14,18 @@ import { Button, Modal, Portal } from "react-native-paper";
 import { useState } from "react";
 import { ModalComponent } from "../../../../components/Modal";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../../store/store";
+import { setOrdenId } from "../../../../store/Ordenes/OrdenIdSlices";
+import { number } from "yup";
 
-export const OptionsOrden = () => {
+export const OptionsOrden = ({ ordenID }: any) => {    
   const [visible, setVisible] = useState(false);
   const navigation = useNavigation();
+  const dispatch = useDispatch<AppDispatch>();
   const handleCancel = () => {
-    navigation.navigate('option' as never)
+    navigation.navigate("option" as never);
+    dispatch(setOrdenId(Number(ordenID.id)));
     setVisible(false);
   };
   return (
@@ -29,11 +35,11 @@ export const OptionsOrden = () => {
           tw`bg-white rounded-xl shadow-md flex justify-center items-center`,
           styles.imageContainer,
         ]}
-        // onPress={() =>
-        //   Linking.openURL(
-        //     `https://wa.me/+58${contract && contract.client_phone}`
-        //   )
-        // }
+        onPress={() =>
+          Linking.openURL(
+            `https://wa.me/+58${ordenID.mobile}`
+          )
+        }
       >
         <FontAwesome6 name="whatsapp" size={24} color="#25D366" />
         <Text>WhatsApp</Text>
@@ -43,12 +49,12 @@ export const OptionsOrden = () => {
           tw`bg-white rounded-xl shadow-md flex justify-center items-center`,
           styles.imageContainer,
         ]}
-        // onPress={() =>
-        //  Linking.openURL(`tel:${contract && contract.client_phone}`)
-        // }
+        onPress={() =>
+         Linking.openURL(`tel:${ordenID.mobile}`)
+        }
       >
         <FontAwesome6 name="phone" size={24} color={theme.colors.primary} />
-        <Text>Telefono</Text>
+        <Text>Teléfono</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={[
@@ -67,16 +73,10 @@ export const OptionsOrden = () => {
         onChange={setVisible}
         actions={
           <>
-            <Button              
-              mode="text"
-              onPress={() => setVisible(false)}
-            >
+            <Button mode="text" onPress={() => setVisible(false)}>
               Cancelar
             </Button>
-            <Button
-              mode="contained"
-              onPress={handleCancel }
-            >
+            <Button mode="contained" onPress={handleCancel}>
               Confirmar
             </Button>
           </>
@@ -88,7 +88,7 @@ export const OptionsOrden = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 20,
+    marginTop: 10,
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",

@@ -1,8 +1,10 @@
 import { Image, Text, View } from "react-native";
 import tw from "twrnc";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../../store/store";
 
 export const AvatarClient = () => {
+  const {contrato} = useSelector((d:RootState)=>d.contratoID)
   return (
     <View style={tw`flex-row mx-3 items-center mt-3`}>
       <View style={tw`shadow-md rounded-full `}>
@@ -12,9 +14,9 @@ export const AvatarClient = () => {
         />
       </View>
       <View>
-        <Text style={tw`ml-4 text-xl font-semibold`}>Cristiano Ronaldo </Text>
-        <Text style={tw`ml-4 text-xl font-semibold`}>de aveiro dos santos</Text>
-        <Text style={tw`ml-4`}>AvatarClient</Text>
+        <Text style={tw`ml-4 text-xl font-semibold`}>{contrato?.client_name_name} </Text>
+        <Text style={tw`ml-4 text-xl font-semibold`}>{contrato?.client_name_lastname}</Text>
+        <Text style={tw`ml-4`}>{contrato?.identification}</Text>
       </View>
     </View>
   );

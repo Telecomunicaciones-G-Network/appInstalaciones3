@@ -4,13 +4,13 @@ import { Contrato, ServiceDetail } from '../../core/Interfaces/ContratoID';
 
 export interface ContratoIDInterface {
   isLoading: boolean;
-  contrato: Contrato | false;
+  contrato: Contrato | null;
   serviceDetail: ServiceDetail | false;
 }
 
 export const inicialStateContratoID: ContratoIDInterface = {
   isLoading: false,
-  contrato: false,
+  contrato: null,
   serviceDetail: false,
 };
 

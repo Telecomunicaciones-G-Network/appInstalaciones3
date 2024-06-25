@@ -1,24 +1,69 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { Button, RadioButton } from "react-native-paper";
-import tw from 'twrnc';
+import { useDispatch, useSelector } from "react-redux";
+import tw from "twrnc";
+import { AppDispatch, RootState } from "../../../store/store";
+import { fetchOpciones } from "../../../store/instalacion/Thunks";
+import { RefreshControl, ScrollView } from "react-native-gesture-handler";
+import { LoadingSpinner } from "../../../components/LoadingSpinner";
+import { ButtonOption } from "./components/ButtonOption";
 
 export const OptionScreen = () => {
-  const [checked, setChecked] = useState("first");
+  const [checked, setChecked] = useState("");
+  const { isLoading, opciones } = useSelector((d: RootState) => d.opciones);
+  const dispatch = useDispatch<AppDispatch>();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    dispatch(fetchOpciones());
+    setRefreshing(false);
+  }, []);
+  useEffect(() => {
+    dispatch(fetchOpciones());
+  }, []);
+
   return (
-    <View style={[tw`px-2 pt-3`,{flex:1}]}>
-      <Text style={tw`text-xl`}>Opciones</Text>
-      <Text style={tw`text-gray-500 mb-3`}>opciones y el motivo para la cancelar la orden</Text>
-      <RadioButton.Group
-        onValueChange={(value) => setChecked(value)}
-        value={checked}
-      >
-        <RadioButton.Item label="Primero item" value="first" />
-        <RadioButton.Item label="Segundo item" value="second" />
-        <RadioButton.Item label="Tercero item" value="tercero" />
-        <RadioButton.Item label="Cuarto item" value="cuarto" />
-      </RadioButton.Group>
-      <Button mode="contained" style={tw`rounded-xl mt-5`} onPress={()=>console.log('llegue')}> Cancelar orden</Button>
-    </View>
+    <ScrollView
+      style={tw`p-4`}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
+      <View style={[tw` pt-3`, { flex: 1 }]}>
+        <Text style={tw`text-xl`}>Opciones</Text>
+        <Text style={tw`text-gray-500 mb-3`}>
+          opciones y el motivo para la cancelar la orden
+        </Text>
+        <View style={tw`bg-white rounded-xl shadow-md pb-7`}>
+          {isLoading ? (
+            <View style={[tw`my-20`, { flex: 1 }]}>
+              <LoadingSpinner />
+            </View>
+          ) : (
+            <>
+              <RadioButton.Group
+                onValueChange={(value) => {
+
+                  setChecked(value);
+                }}
+                value={checked}
+              >
+                {opciones.map((d) => (
+                  <RadioButton.Item
+                  key={d.id}
+                    label={d.name}
+                    value={d.id.toString()}
+                    style={tw`my-1`}
+                  />
+                ))}
+              </RadioButton.Group>
+              <ButtonOption selectedIndex={checked} />
+            </>
+          )}
+        </View>
+      </View>
+    </ScrollView>
   );
 };

@@ -20,6 +20,8 @@ export const opcionesSLice=createSlice({
           state.isLoading = true;
         })
         .addCase(fetchOpciones.fulfilled, (state, {payload}) => {
+            
+            
             state.isLoading = false;
              state.opciones=payload
             // state.count=payload.count

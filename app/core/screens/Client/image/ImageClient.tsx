@@ -1,67 +1,54 @@
 import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { theme } from "../../../../../App";
-import { Button } from "react-native-paper";
+import { Button, Title } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import tw from "twrnc";
 import { ScrollView } from "react-native-gesture-handler";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 
+const titles = [
+  {
+    name: "Caja Abierta",
+  },
+  {
+    name: "Caja Cerrada",
+  },
+  {
+    name: "Midiendo potencia",
+  },
+  {
+    name: "Foto de Instalación",
+  },
+];
+
 export const ImageClient = () => {
-  const navigation = useNavigation();
-  const handleMap = () => {
-    navigation.navigate("image" as never);
+  const navigation = useNavigation<any>();
+
+  const handleMap = (title:string) => {
+    navigation.navigate("image", {title} );
   };
+
   return (
     <ScrollView>
       <View
         style={[tw`px-2`, { flex: 1, backgroundColor: theme.colors.default }]}
       >
         <View style={styles.container}>
-          <View
-            style={[tw`bg-white rounded-xl shadow-md`, styles.imageContainer]}
-          >
-            <Text style={tw`text-center mb-2`}>Caja Abierta</Text>
-            <TouchableOpacity onPress={handleMap}>
-              <Image
-                source={require("../../../../../assets/img/PLANTILLA_PROMOCION.png")}
-                style={[tw`h-50 w-40 rounded-xl`, { alignSelf: "center" }]}
-              />
-            </TouchableOpacity>
-          </View>
-          <View
-            style={[tw`bg-white rounded-xl shadow-md`, styles.imageContainer]}
-          >
-            <Text style={tw`text-center mb-2`}>Caja Cerrada</Text>
-            <TouchableOpacity onPress={handleMap}>
-              <NoImage />
-              {/* <Image
-                source={require("../../../../../assets/img/PLANTILLA_PROMOCION.png")}
-                style={[tw`h-50 w-40 rounded-xl`, { alignSelf: "center" }]}
-              /> */}
-            </TouchableOpacity>
-          </View>
-          <View
-            style={[tw`bg-white rounded-xl shadow-md`, styles.imageContainer]}
-          >
-            <Text style={tw`text-center mb-2`}>Midiendo potencia</Text>
-            <TouchableOpacity onPress={handleMap}>
-              <Image
-                source={require("../../../../../assets/img/PLANTILLA_PROMOCION.png")}
-                style={[tw`h-50 w-40 rounded-xl`, { alignSelf: "center" }]}
-              />
-            </TouchableOpacity>
-          </View>
-          <View
-            style={[tw`bg-white rounded-xl shadow-md`, styles.imageContainer]}
-          >
-            <Text style={tw`text-center mb-2`}>Foto de instalación</Text>
-            <TouchableOpacity onPress={handleMap}>
-              <Image
-                source={require("../../../../../assets/img/PLANTILLA_PROMOCION.png")}
-                style={[tw`h-50 w-40 rounded-xl`, { alignSelf: "center" }]}
-              />
-            </TouchableOpacity>
-          </View>
+          {titles.map((title) => (
+            <View
+            key={title.name}
+              style={[tw`bg-white rounded-xl shadow-md`, styles.imageContainer]}
+            >
+              <Text style={tw`text-center mb-2`}>{title.name}</Text>
+              <TouchableOpacity onPress={()=>handleMap(title.name)}>
+                <Image
+                  source={require("../../../../../assets/img/PLANTILLA_PROMOCION.png")}
+                  style={[tw`h-50 w-40 rounded-xl`, { alignSelf: "center" }]}
+                />
+              </TouchableOpacity>
+            </View>
+          ))}
+
           <View
             style={[
               tw`bg-white rounded-xl shadow-md`,
@@ -69,7 +56,7 @@ export const ImageClient = () => {
             ]}
           >
             <Text style={tw`text-center mb-2`}>Firma del cliente</Text>
-            <TouchableOpacity onPress={handleMap}>
+            <TouchableOpacity onPress={()=>handleMap('Firma')}>
               {/* <Image
                 source={require("../../../../../assets/img/PLANTILLA_PROMOCION.png")}
                 style={[tw`h-80 w-80 rounded-xl`, { alignSelf: "center" }]}

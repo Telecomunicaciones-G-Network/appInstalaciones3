@@ -3,7 +3,9 @@ import tw from "twrnc";
 import { theme } from "../../../../../App";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
-export const CardOrden = () => {
+export const CardOrden = ({order}:{order:any}) => {
+  
+  
   return (
     <View
       style={[
@@ -11,9 +13,9 @@ export const CardOrden = () => {
         { backgroundColor: theme.colors.accent },
       ]}
     >
-      <Text style={tw`text-white font-semibold text-2xl ml-10`}>1NAXTQ</Text>
+      <Text style={tw`text-white font-semibold text-3xl ml-5`}>{order.order}</Text>
       <View style={tw`mr-3`}>
-        <AntDesign name="filetext1" size={50} color={theme.colors.default} />
+        <AntDesign name="filetext1" size={40} color={theme.colors.default} />
       </View>
     </View>
   );
