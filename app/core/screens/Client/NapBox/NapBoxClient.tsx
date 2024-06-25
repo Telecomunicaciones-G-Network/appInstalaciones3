@@ -19,9 +19,7 @@ export const NapBoxClient = () => {
   const [refreshing, setRefreshing] = useState(false);
   const { serviceDetail } = useSelector((d: RootState) => d.contratoID);
   const { isLoading, napBox } = useSelector((d: RootState) => d.nap_box);
-  console.log(serviceDetail)  
-  
-  
+
   useEffect(() => {
     if (serviceDetail) {
       dispatch(fetchNap_box(Number(serviceDetail.nap_id)));
@@ -29,24 +27,20 @@ export const NapBoxClient = () => {
   }, []);
 
   const onRefresh = useCallback(() => {
-    setRefreshing(true
-      
-      
-    );
+    setRefreshing(true);
     setTimeout(() => {
       setRefreshing(false);
       if (serviceDetail) {
         dispatch(fetchNap_box(Number(serviceDetail.nap_id)));
       }
-      
     }, 2000);
   }, []);
 
   return (
     <ScrollView
-    refreshControl={
-      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-    }
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
     >
       <View
         style={[
@@ -59,14 +53,8 @@ export const NapBoxClient = () => {
         <View style={styles.container}>
           <CardNapBoxClient
             title="Nro puertos"
-            content={napBox?napBox.port.length:0}
-            icon={
-              <FontAwesome5
-                name="network-wired"
-                size={20}
-                color="black"
-              />
-            }
+            content={napBox ? napBox.port.length : 0}
+            icon={<FontAwesome5 name="network-wired" size={20} color="black" />}
           />
           <CardNapBoxClient
             title="Aeropuerto"
@@ -74,14 +62,18 @@ export const NapBoxClient = () => {
               <Ionicons
                 name="airplane"
                 size={28}
-                color={napBox.airport?theme.colors.success:'black'}
+                color={napBox.airport ? theme.colors.success : "black"}
               />
             }
           />
           <CardNapBoxClient
             title="Centro comercial"
             content={
-              <MaterialCommunityIcons name="store" size={28} color={napBox.airport?theme.colors.success:'black'} />
+              <MaterialCommunityIcons
+                name="store"
+                size={28}
+                color={napBox.airport ? theme.colors.success : "black"}
+              />
             }
           />
         </View>
@@ -89,9 +81,12 @@ export const NapBoxClient = () => {
           <LoadingSpinner />
         ) : (
           <>
-            <View style={tw`bg-white h-50 rounded-xl p-2 mb-4`}>
-              <MapNapBoxClient />
-            </View>
+            {serviceDetail && (
+              <View style={tw`bg-white h-50 rounded-xl p-2 mb-4`}>
+                <MapNapBoxClient />
+              </View>
+            )}
+
             <ListNapBoxClient />
           </>
         )}

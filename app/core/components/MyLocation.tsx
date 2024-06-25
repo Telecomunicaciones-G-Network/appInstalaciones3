@@ -4,10 +4,16 @@ import { Text, View, Animated, Easing } from "react-native";
 import * as Location from "expo-location";
 import tw from "twrnc";
 import { getLocation } from "../../libs/GetLocation";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
+import { patchOrdenFallow } from "../../store/Ordenes/Thunks";
+import { useUser } from "../hooks/useUser";
 
 export const MyLocation = () => {
+  const {getUser} =useUser()
+  const { idAllow } = useSelector((d: RootState) => d.ordenActive);
   const [animation] = useState(new Animated.Value(1));
-  const [colorAnimation] = useState(new Animated.Value(1));
+  const [name, setName] = useState('')
 
   useEffect(() => {
     const blinkingAnimation = Animated.loop(
@@ -35,10 +41,25 @@ export const MyLocation = () => {
     };
   }, [animation]);
 
+  const handleUser=async()=>{
+  const {name:nameUser}:any =  await getUser()
+    setName(nameUser)
+    
+  }
+
   useEffect(() => {
-    // let interval;
-    // interval = setInterval(getLocation, 120000);
-    // return () => clearInterval(interval);
+    handleUser()
+    
+    let interval;
+    interval = setInterval(async () => {
+      const coords: any = await getLocation();
+      patchOrdenFallow(idAllow, {
+        coordinate: `${coords.latitude}, ${coords.longitude}`,
+        longitude: coords.longitude,
+        latitude: coords.latitude,
+      }).then((d) => {});
+    }, 120000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -58,7 +79,7 @@ export const MyLocation = () => {
         </Animated.View>
       </View>
       <View>
-        <Text style={tw`text-xl`}>Grupo 1</Text>
+        <Text style={tw`text-xl`}>{name}</Text>
       </View>
     </View>
   );

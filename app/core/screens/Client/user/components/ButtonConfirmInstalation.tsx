@@ -13,14 +13,15 @@ import { coreApi } from "../../../../../api/CoreApi";
 import { ToastSuccess } from "../../../../../libs/Toast";
 import { ModalComponent } from "../../../../../components/Modal";
 import { useState } from "react";
-import { fetchOrdenes } from "../../../../../store/Ordenes/Thunks";
+import { fetchOrdenes, patchOrdenFallow } from "../../../../../store/Ordenes/Thunks";
 import { useNavigation } from "@react-navigation/native";
 
 export const ButtonConfirmInstalation = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
-  const { contrato, isLoading } = useSelector((d: RootState) => d.contratoID);
+  const { contrato } = useSelector((d: RootState) => d.contratoID);
+  const { idAllow } = useSelector((d: RootState) => d.ordenActive);
   const finalizarOrden = () => {
     dispatch(mostrarCargando());
     if (contrato) {
@@ -32,6 +33,7 @@ export const ButtonConfirmInstalation = () => {
           }
         )
         .then((result) => {
+          patchOrdenFallow(idAllow, {status:false}).then((d) => {});
           setVisible(false);
           dispatch(ocultarCargando());
           ToastSuccess("Finalizado con éxito");

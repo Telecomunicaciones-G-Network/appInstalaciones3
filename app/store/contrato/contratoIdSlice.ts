@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchIdContratoId } from "./Thunks";
-import { Contrato, ServiceDetail } from '../../core/Interfaces/ContratoID';
+import { Contrato, ServiceDetail } from "../../core/Interfaces/ContratoID";
 
 export interface ContratoIDInterface {
   isLoading: boolean;

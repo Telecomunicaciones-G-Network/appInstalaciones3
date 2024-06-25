@@ -18,10 +18,13 @@ import { ButtonConfirmInstalation } from "./components/ButtonConfirmInstalation"
 export const UserClient = () => {
   const [refreshing, setRefreshing] = useState(false);
   const { contract } = useSelector((d: RootState) => d.ordenActive);
-  const { isLoading } = useSelector((d: RootState) => d.contratoID);
+  const { isLoading, } = useSelector((d: RootState) => d.contratoID);
+  
   const dispatch = useDispatch<AppDispatch>();
 
   const requestClient = () => {
+    
+    
     dispatch(fetchIdContratoId(contract));
   };
 

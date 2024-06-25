@@ -10,7 +10,10 @@ import { fetchIdOrden, postOrdenValid } from "../../../../store/Ordenes/Thunks";
 import { Ordenes } from "../../../Interfaces/OrdenesInterface";
 import { getLocation } from "../../../../libs/GetLocation";
 import { ToastError, ToastSuccess } from "../../../../libs/Toast";
-import { setActiveOrden } from "../../../../store/Ordenes/OrdenActiveSlice";
+import {
+  setActiveOrden,
+  setAllow,
+} from "../../../../store/Ordenes/OrdenActiveSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../../store/store";
 import { setOrdenId } from "../../../../store/Ordenes/OrdenIdSlices";
@@ -29,8 +32,7 @@ export const ButtonConfirmOrden = ({ order: { id, contract } }: Props) => {
       ...body,
       contract,
     };
-    
-    
+
     dispatch(setActiveOrden(send));
     dispatch(setOrdenId(id));
     navigation.reset({
@@ -49,17 +51,16 @@ export const ButtonConfirmOrden = ({ order: { id, contract } }: Props) => {
       coordinate,
       status: true,
     };
-     
-    
+
     postOrdenValid(body)
       .then((result) => {
-        console.log(JSON.stringify(result))
         const { status, coordinate, ...rest } = body;
         const data = {
           ...rest,
           latitude: coords?.latitude,
           longitude: coords?.longitude,
         };
+        dispatch(setAllow(result.data.id));
         routerConfirm(data);
       })
       .catch((err) => {
