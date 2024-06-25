@@ -27,16 +27,14 @@ export const OrderScreen = () => {
     );
   }, []);
   useEffect(() => {
-    console.log(ordenes);
-    
     if (ordenes.length > 0) {
       setOrderID(ordenes[0]);
-    }else{
-      setOrderID(false)
+    } else {
+      setOrderID(false);
     }
   }, [isLoading]);
   return (
-    <ScrollView style={{flex:1}}>
+    <ScrollView style={{ flex: 1 }}>
       <View
         style={[tw`px-2 `, { flex: 1, backgroundColor: theme.colors.default }]}
       >
