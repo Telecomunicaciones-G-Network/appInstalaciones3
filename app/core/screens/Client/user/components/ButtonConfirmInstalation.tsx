@@ -26,10 +26,8 @@ export const ButtonConfirmInstalation = () => {
   const { contrato } = useSelector((d: RootState) => d.contratoID);
   const { ordenID } = useSelector((d: RootState) => d.ordenesId);
   const { idAllow } = useSelector((d: RootState) => d.ordenActive);
-  
 
   const finalizarOrden = () => {
-    
     dispatch(mostrarCargando());
     if (contrato) {
       coreApi
@@ -62,16 +60,17 @@ export const ButtonConfirmInstalation = () => {
     }
   };
 
-  const handleButton=()=>{
-    if (ordenID && ordenID.image_order.length == 0) {
-      return ToastError("Debe ingresar imágenes");
+  const handleButton = () => {
+    if (ordenID.image_order.length < 4) {
+      return ToastError("Debe ingresar todas las imágenes");
     }
 
-    if (!contrato?.signe_base64) {
+    if (!contrato?.signe) {
       return ToastError("Debe ingresar la firma");
     }
-    setVisible(true)
-  }
+
+    setVisible(true);
+  };
 
   return (
     <View style={tw`mt-5 pb-4`}>

@@ -1,16 +1,30 @@
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { PanResponder, StyleSheet, Text, View } from "react-native";
+import { Alert, PanResponder, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Button } from "react-native-paper";
 import tw from "twrnc";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import Svg, { Polyline } from "react-native-svg";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import ViewShot from "react-native-view-shot";
+import { patchContractId } from "../../../store/contrato/Thunks";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../store/store";
+import { fetchIdOrden } from "../../../store/Ordenes/Thunks";
+import { mostrarCargando, ocultarCargando } from "../../../store/splash/splashSlice";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { ToastSuccess } from "../../../libs/Toast";
 
 export const SigneScreen = () => {
   const [lines, setLines] = useState<any>([]);
   const [currentLine, setCurrentLine] = useState<any>([]);
-
+  const viewShotRef = useRef<any>();
+  const navigation = useNavigation()
+  const {contrato} = useSelector((d:RootState)=>d.contratoID)
+  const dispatch = useDispatch<AppDispatch>()
+  
+  
+  
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
     onPanResponderMove: (evt, gestureState) => {
@@ -24,6 +38,38 @@ export const SigneScreen = () => {
       setCurrentLine([]);
     },
   });
+
+  const handleNavigation = () => {
+    if (contrato) {
+      dispatch(fetchIdOrden(contrato.order_id));
+      navigation.navigate("Imagen" as never);
+      dispatch(ocultarCargando());
+    }
+  };
+
+  const captureImage = async () => {
+    try {
+      const uri = await viewShotRef.current.capture();
+      handleRequest(uri)
+    } catch (error) {
+      Alert.alert("Error", "An error occurred while capturing the image.");
+    }
+  };
+
+  const handleRequest=(img:any)=>{
+    const body = {
+        signe_base64:`data:image/png;base64,${img}`
+    }
+    
+    dispatch(mostrarCargando());
+    patchContractId(contrato?.id,body)
+    .then((result) => {
+        ToastSuccess("Firma guardada con éxito");
+        handleNavigation()
+    }).catch((err) => {
+        console.log(err);
+    });
+  }
   return (
     <View
       style={[
@@ -31,29 +77,35 @@ export const SigneScreen = () => {
         { flex: 1, justifyContent: "center", alignContent: "center" },
       ]}
     >
-      <View style={styles.container} {...panResponder.panHandlers}>
-        <Svg style={styles.svg}>
-          {lines.map((line: any, index: any) => (
+      <ViewShot
+        ref={viewShotRef}
+        options={{ format: "png", result: "base64", quality: 0.9 }}
+        style={{ flex: 1 }}
+      >
+        <View  {...panResponder.panHandlers}>
+          <Svg style={styles.svg}>
+            {lines.map((line: any, index: any) => (
+              <Polyline
+                key={index}
+                points={line.map((p: any) => `${p.x},${p.y}`).join(" ")}
+                fill="none"
+                stroke="black"
+                strokeWidth="3"
+              />
+            ))}
             <Polyline
-              key={index}
-              points={line.map((p: any) => `${p.x},${p.y}`).join(" ")}
+              points={currentLine.map((p: any) => `${p.x},${p.y}`).join(" ")}
               fill="none"
               stroke="black"
               strokeWidth="3"
             />
-          ))}
-          <Polyline
-            points={currentLine.map((p:any) => `${p.x},${p.y}`).join(" ")}
-            fill="none"
-            stroke="black"
-            strokeWidth="3"
-          />
-        </Svg>
-      </View>
+          </Svg>
+        </View>
+      </ViewShot>
 
       <Button
         mode="contained"
-        onPress={() => console.log("llegue")}
+        onPress={captureImage}
         style={[tw`rounded-lg mt-4 bg-green-500`]}
         icon={() => (
           <MaterialCommunityIcons name="content-save" size={24} color="white" />
@@ -78,10 +130,7 @@ const NoImage = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#FFF",
-  },
+  
   svg: {
     flex: 1,
   },

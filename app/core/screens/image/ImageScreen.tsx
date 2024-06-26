@@ -16,6 +16,7 @@ import { theme } from "../../../../App";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { mostrarCargando, ocultarCargando } from "../../../store/splash/splashSlice";
 import { fetchIdOrden } from "../../../store/Ordenes/Thunks";
+import { fetchIdContratoId } from "../../../store/contrato/Thunks";
 
 export const ImageScreen = () => {
   const navigation = useNavigation();
@@ -51,8 +52,9 @@ export const ImageScreen = () => {
 
   const handleNavigation = () => {
     if (contrato) {
-      dispatch(fetchIdOrden(contrato.order_id));
       navigation.navigate("Imagen" as never);
+      dispatch(fetchIdOrden(contrato.order_id));
+      dispatch(fetchIdContratoId(contrato.id));
       dispatch(ocultarCargando());
   
     }

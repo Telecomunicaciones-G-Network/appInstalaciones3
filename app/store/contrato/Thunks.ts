@@ -23,3 +23,7 @@ export const fetchIdContratoId = createAsyncThunk(
       });
   }
 );
+
+export const patchContractId=(id:any,body:any)=>{
+  return coreApi.patch(`/api/gsoft/contracts/${id}/`,body)
+}

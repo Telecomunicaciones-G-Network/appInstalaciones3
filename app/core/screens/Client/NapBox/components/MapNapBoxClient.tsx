@@ -27,7 +27,7 @@ export const MapNapBoxClient = (props: Props) => {
       longitude: Number(napBox?.longitude),
     });
     setTimeout(() => {
-      setIsLoading(isLoading);
+      setIsLoading(false);
       handleCenterMap();
     }, 1000);
   }, [napBox]);
