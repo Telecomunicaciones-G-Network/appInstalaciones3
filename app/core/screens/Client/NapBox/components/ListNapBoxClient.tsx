@@ -4,16 +4,21 @@ import tw from "twrnc";
 import { theme } from "../../../../../../App";
 import { ModalComponent } from "../../../../../components/Modal";
 import { useState } from "react";
+import { RootState } from "../../../../../store/store";
+import { useSelector } from "react-redux";
 
 export const ListNapBoxClient = () => {
   const [visible, setVisible] = useState(false);
+  const { isLoading, napBox } = useSelector((d: RootState) => d.nap_box);
   return (
     <View>
       <View style={tw`bg-white rounded-xl shadow-md mb-2`}>
         <List.Item
-          title="Sector"
-          description="20"
-          right={(props) => (
+          title={() => (
+            <Text style={{ color: theme.colors.secondary }}>Sector</Text>
+          )}
+          description={napBox.sector_name}
+          left={(props) => (
             <List.Icon
               {...props}
               icon="crosshairs"
@@ -24,18 +29,24 @@ export const ListNapBoxClient = () => {
       </View>
       <View style={tw`bg-white rounded-xl shadow-md`}>
         <List.Item
-          title="Puertos Ocupado"
+          title={() => (
+            <Text style={{ color: theme.colors.secondary }}>
+              Puertos Ocupado
+            </Text>
+          )}
           description="20"
-          right={(props) => (
+          left={(props) => (
             <List.Icon {...props} icon="cancel" color={theme.colors.primary} />
           )}
         />
       </View>
       <View style={tw`bg-white rounded-xl shadow-md my-2`}>
         <List.Item
-          title="Coordenada"
-          description="Item description"
-          right={(props) => (
+          title={() => (
+            <Text style={{ color: theme.colors.secondary }}>Coordenada</Text>
+          )}
+          description={napBox.coordinate}
+          left={(props) => (
             <List.Icon
               {...props}
               icon="map-marker-radius"
@@ -46,10 +57,12 @@ export const ListNapBoxClient = () => {
       </View>
       <View style={tw`bg-white rounded-xl shadow-md `}>
         <List.Item
-          title="Detalles"
-          description="Lorem ipsum dolor sit "
+          title={() => (
+            <Text style={{ color: theme.colors.secondary }}>Detalles</Text>
+          )}
+          description={napBox.detail}
           onPress={() => setVisible(true)}
-          right={(props) => (
+          left={(props) => (
             <List.Icon
               {...props}
               icon="information"
@@ -62,14 +75,7 @@ export const ListNapBoxClient = () => {
           title="Detalles"
           message={
             <Text style={tw`text-lg`}>
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-              Inventore a ea, recusandae, ipsam commodi minima neque ex facere
-              corrupti est sit accusamus earum molestiae magnam eaque. Nisi
-              tenetur reiciendis recusandae. Quia recusandae a dolorum facilis
-              asperiores provident suscipit ipsum officiis animi, repudiandae
-              rerum, sequi quos? Quod veritatis illum culpa doloremque inventore
-              iste. Labore saepe alias molestiae consequatur laudantium
-              quibusdam eaque.
+              {napBox.detail}
             </Text>
           }
           onChange={setVisible}

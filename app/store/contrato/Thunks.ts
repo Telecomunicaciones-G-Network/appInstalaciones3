@@ -11,13 +11,13 @@ export const fetchIdContratoId = createAsyncThunk(
         
         
         if (status == 200) {
-          console.log(JSON.stringify(data))
+          
           return data;
         }
         return inicialStateContratoID;
       })
       .catch((err) => {
-        console.log(err.response);
+        
 
         return inicialStateContratoID;
       });

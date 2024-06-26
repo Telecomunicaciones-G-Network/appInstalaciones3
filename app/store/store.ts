@@ -7,6 +7,7 @@ import { Napslice } from "./cajaNap/Napslice";
 import { contratoIdSlice } from "./contrato/contratoIdSlice";
 import { opcionesSLice } from "./instalacion/opcionesSlices";
 import { coreSlice } from "./core/coreSlice";
+import { ordenActiveSlice } from "./Ordenes/OrdenActiveSlice";
 
 export const store = configureStore({
   reducer: {
@@ -17,7 +18,8 @@ export const store = configureStore({
     nap_box: Napslice.reducer,
     contratoID: contratoIdSlice.reducer,
     opciones:opcionesSLice.reducer,
-    core:coreSlice.reducer
+    core:coreSlice.reducer,
+    ordenActive:ordenActiveSlice.reducer,
   },
 });
 

@@ -4,7 +4,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import tw from "twrnc";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Storage from "../libs/storage";
 import { useDispatch } from "react-redux";
 import { mostrarCargando, ocultarCargando } from "../store/splash/splashSlice";
@@ -14,10 +14,15 @@ import { theme } from "../../App";
 import { CoreRouters } from "../core/routers/CoreRouters";
 import { ClientScreen } from "../core/screens/Client/ClientScreen";
 import { MyLocation } from "../core/components/MyLocation";
+import { ImageScreen } from "../core/screens/image/ImageScreen";
+import { OptionScreen } from "../core/screens/options/OptionScreen";
+import { ModalComponent } from "../components/Modal";
+import { Button } from "react-native-paper";
 
 const principal = createStackNavigator();
 
 export const RutasPrincipal = () => {
+  const [visible, setVisible] = useState(false);
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
@@ -46,7 +51,6 @@ export const RutasPrincipal = () => {
                 routes: [{ name: "auth" as never }],
               });
             }
-            console.log(error.response);
           });
       }
     });
@@ -76,7 +80,6 @@ export const RutasPrincipal = () => {
       }
       dispatch(ocultarCargando());
     } catch (error) {
-      console.error("Error al obtener el token del almacenamiento:", error);
       Storage.remove("accessToken");
       Storage.remove("refreshToken");
       Storage.remove("user");
@@ -88,18 +91,15 @@ export const RutasPrincipal = () => {
     }
   };
 
-  const LogoTitle = () => {
-    return (
-      <Image
-        // style={{ width: 130, height: 22 }}
-        style={{
-          width: 100,
-          height: 40,
-          resizeMode: "contain",
-        }}
-        source={require("../../assets/img/morden-logo2.png")}
-      />
-    );
+  const handleLogout = () => {
+    Storage.remove("accessToken");
+    Storage.remove("refreshToken");
+    Storage.remove("user");
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "auth" as never }],
+    });
+    setVisible(false)
   };
 
   return (
@@ -122,25 +122,19 @@ export const RutasPrincipal = () => {
               </>
             ),
             headerRight: () => (
-              <TouchableOpacity
-                onPress={() => {
-                  Storage.remove("accessToken");
-                  Storage.remove("refreshToken");
-                  Storage.remove("user");
-                  navigation.reset({
-                    index: 0,
-                    routes: [{ name: "auth" as never }],
-                  });
-                }} // Navegar a la pantalla de configuración
-                style={{ marginRight: 10 }}
-              >
-                <Ionicons
-                  name="log-out-outline"
-                  size={24}
-                  color={theme.colors.primary}
-                  style={tw`mr-2`}
-                />
-              </TouchableOpacity>
+              <>
+                <TouchableOpacity
+                  onPress={() => setVisible(true)} 
+                  style={{ marginRight: 10 }}
+                >
+                  <Ionicons
+                    name="log-out-outline"
+                    size={24}
+                    color={theme.colors.primary}
+                    style={tw`mr-2`}
+                  />
+                </TouchableOpacity>
+              </>
             ),
 
             headerStyle: { backgroundColor: theme.colors.default },
@@ -152,6 +146,31 @@ export const RutasPrincipal = () => {
           component={ClientScreen}
           options={{
             headerTitle: (props) => <MyLocation />,
+            headerRight: () => (
+              <>
+                <TouchableOpacity
+                  onPress={() => setVisible(true)} 
+                  style={{ marginRight: 10 }}
+                >
+                  <Ionicons
+                    name="log-out-outline"
+                    size={24}
+                    color={theme.colors.primary}
+                    style={tw`mr-2`}
+                  />
+                </TouchableOpacity>
+              </>
+            ),
+
+            headerStyle: { backgroundColor: theme.colors.default },
+            headerShadowVisible: false,
+          }}
+        />
+        <principal.Screen
+          name="option"
+          component={OptionScreen}
+          options={{
+            // headerTitle: (props) =><> </>,
             headerRight: () => (
               <TouchableOpacity
                 onPress={() => {
@@ -174,11 +193,29 @@ export const RutasPrincipal = () => {
               </TouchableOpacity>
             ),
 
-            headerStyle: { backgroundColor: theme.colors.default },
             headerShadowVisible: false,
           }}
         />
+        <principal.Group screenOptions={{ presentation: "card" }}>
+          <principal.Screen name="image" component={ImageScreen} />
+        </principal.Group>
       </principal.Navigator>
+      <ModalComponent
+        isVisible={visible}
+        title="Confirmar"
+        message="Estas seguro que deseas salir?"
+        onChange={setVisible}
+        actions={
+          <>
+            <Button mode="text" onPress={() => setVisible(false)}>
+              Cancelar
+            </Button>
+            <Button mode="contained" onPress={handleLogout}>
+              Confirmar
+            </Button>
+          </>
+        }
+      />
     </>
   );
 };

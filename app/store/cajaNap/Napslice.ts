@@ -22,9 +22,7 @@ export const Napslice = createSlice({
         state.isLoading = true;
       })
       .addCase(fetchNap_box.fulfilled, (state, { payload }) => {
-        state.isLoading = false;
-        console.log(payload);
-        
+        state.isLoading = false;                
         state.napBox = payload;
       });
   },
