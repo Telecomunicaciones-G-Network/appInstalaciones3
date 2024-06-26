@@ -1,14 +1,15 @@
 import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { theme } from "../../../../../App";
 import { Button, Title } from "react-native-paper";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import tw from "twrnc";
-import { ScrollView } from "react-native-gesture-handler";
+import { RefreshControl, ScrollView } from "react-native-gesture-handler";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { AppDispatch, RootState } from "../../../../store/store";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { fetchIdOrden } from "../../../../store/Ordenes/Thunks";
+import { fetchIdContratoId } from "../../../../store/contrato/Thunks";
 
 const titles = [
   {
@@ -29,25 +30,44 @@ export const ImageClient = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { contrato } = useSelector((d: RootState) => d.contratoID);
   const { ordenID } = useSelector((d: RootState) => d.ordenesId);
+  const [refreshing, setRefreshing] = useState(false);
+
   const [imagesOrder, setImagesOrder] = useState<any>([]);
+  console.log(contrato?.signe);
 
   const navigation = useNavigation<any>();
 
   const handleMap = (title: string) => {
     navigation.navigate("image", { title });
   };
+  const handleSigne = () => {
+    navigation.navigate("signe");
+  };
 
   const handleRequest = () => {
     if (contrato) {
       dispatch(fetchIdOrden(contrato.order_id));
+      dispatch(fetchIdContratoId(contrato.id));
     }
   };
   useEffect(() => {
     handleRequest();
   }, []);
 
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      handleRequest();
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+
   return (
-    <ScrollView>
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <View
         style={[tw`px-2`, { flex: 1, backgroundColor: theme.colors.default }]}
       >
@@ -57,7 +77,6 @@ export const ImageClient = () => {
               (d: any) => d.detail == title.name
             );
 
-            
             return (
               <View
                 key={title.name}
@@ -90,13 +109,18 @@ export const ImageClient = () => {
             ]}
           >
             <Text style={tw`text-center mb-2`}>Firma del cliente</Text>
-            <TouchableOpacity onPress={() => handleMap("Firma")}>
-              {/* <Image
-                source={require("../../../../../assets/img/PLANTILLA_PROMOCION.png")}
-                style={[tw`h-80 w-80 rounded-xl`, { alignSelf: "center" }]}
-              /> */}
-              <NoImage unique />
-            </TouchableOpacity>
+            {contrato?.signe ? (
+              <TouchableOpacity onPress={handleSigne}>
+                <Image
+                  source={{ uri: contrato?.signe }}
+                  style={[tw`h-80 w-80 rounded-xl`, { alignSelf: "center" }]}
+                />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={() => handleSigne()}>
+                <NoImage unique />
+              </TouchableOpacity>
+            )}
           </View>
         </View>
       </View>

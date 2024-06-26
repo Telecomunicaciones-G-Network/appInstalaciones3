@@ -1,6 +1,7 @@
 import axios from "axios";
 import { ToastError } from "../libs/Toast";
 import Storage from "../libs/storage";
+import eventEmitter from "../libs/Eventemitter";
 
 export const coreApi = axios.create({
   //baseURL: "https://core.gsoft.app",
@@ -33,11 +34,10 @@ coreApi.interceptors.response.use(
     if (error.response.status == 0) {
       ToastError("Error de conexión, intente nuevamente");
     }
-    // if (error.response.status == 401) {
-    //   localStorage.clear();
-    //   window.location.href = "/auth/";
-    //   return;
-    // }
+    if (error.response.status == 401) {
+      ToastError("Token cancelado");
+      eventEmitter.emit('unauthorized');
+    }
     return Promise.reject(error);
   }
 );

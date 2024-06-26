@@ -18,14 +18,18 @@ import { ImageScreen } from "../core/screens/image/ImageScreen";
 import { OptionScreen } from "../core/screens/options/OptionScreen";
 import { ModalComponent } from "../components/Modal";
 import { Button } from "react-native-paper";
+import { SigneScreen } from "../core/screens/signe/SigneScreen";
+import eventEmitter from "../libs/Eventemitter";
+import { useUser } from "../core/hooks/useUser";
 
 const principal = createStackNavigator();
 
 export const RutasPrincipal = () => {
+  const {getUser} = useUser()
   const [visible, setVisible] = useState(false);
   const navigation = useNavigation();
   const dispatch = useDispatch();
-
+  const [name, setName] = useState('')
   const saveStorage = async (key: any, value: any) => {
     const stringValue = JSON.stringify(value);
     await Storage.store(key, stringValue);
@@ -56,7 +60,24 @@ export const RutasPrincipal = () => {
     });
   };
 
+  const handleUnauthorized=()=>{
+    Storage.remove("accessToken");
+    Storage.remove("refreshToken");
+    Storage.remove("user");
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "auth" as never }],
+    });
+  }
+
+  const handleUser = async () => {
+    const { name: nameUser }: any = await getUser();
+    setName(nameUser);
+  };
+
   useEffect(() => {
+    handleUser()
+    eventEmitter.on('unauthorized', handleUnauthorized);
     const interv = setInterval(() => {
       // Incrementar el contador en cada intervalo
       refresh();
@@ -72,21 +93,15 @@ export const RutasPrincipal = () => {
     dispatch(mostrarCargando());
     try {
       const token = await Storage.get("accessToken");
-      if (token) {
+      if (!token) {
         navigation.reset({
           index: 0,
-          routes: [{ name: "client" as never }],
+          routes: [{ name: "auth" as never }],
         });
       }
       dispatch(ocultarCargando());
     } catch (error) {
-      Storage.remove("accessToken");
-      Storage.remove("refreshToken");
-      Storage.remove("user");
-      navigation.reset({
-        index: 0,
-        routes: [{ name: "auth" as never }],
-      });
+      handleUnauthorized()
       dispatch(ocultarCargando());
     }
   };
@@ -101,6 +116,9 @@ export const RutasPrincipal = () => {
     });
     setVisible(false)
   };
+
+  
+
 
   return (
     <>
@@ -118,7 +136,8 @@ export const RutasPrincipal = () => {
           options={{
             headerTitle: (props) => (
               <>
-                <Text style={[tw`text-xl `]}>Grupo 1</Text>
+              
+                <Text style={[tw`text-xl `]}>{name}</Text>
               </>
             ),
             headerRight: () => (
@@ -198,6 +217,9 @@ export const RutasPrincipal = () => {
         />
         <principal.Group screenOptions={{ presentation: "card" }}>
           <principal.Screen name="image" component={ImageScreen} />
+        </principal.Group>
+        <principal.Group screenOptions={{ presentation: "card" }}>
+          <principal.Screen name="signe" component={SigneScreen} />
         </principal.Group>
       </principal.Navigator>
       <ModalComponent
