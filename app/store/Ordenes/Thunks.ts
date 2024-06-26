@@ -29,7 +29,6 @@ export const fetchIdOrden = createAsyncThunk(
         return initialStateOrdenId;
       })
       .catch((err) => {
-        
         return initialStateOrdenId;
       });
   }
@@ -39,6 +38,6 @@ export const postOrdenValid = (body: any) => {
   return coreApi.post(`/api/gsoft/installations/groups-fallow/`, body);
 };
 
-export const patchOrdenFallow = (id:any,body: any) => {
+export const patchOrdenFallow = (id: any, body: any) => {
   return coreApi.patch(`/api/gsoft/installations/groups-fallow/${id}/`, body);
 };

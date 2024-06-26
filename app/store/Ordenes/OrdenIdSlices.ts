@@ -17,7 +17,7 @@ import {
 
 export interface OrdenIdSliceInterface {
   isLoading: boolean;
-  ordenID: OrdenId | false;
+  ordenID: OrdenId | any;
   id: number;
   
 }

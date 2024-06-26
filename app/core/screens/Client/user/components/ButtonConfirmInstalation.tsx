@@ -10,10 +10,13 @@ import {
   ocultarCargando,
 } from "../../../../../store/splash/splashSlice";
 import { coreApi } from "../../../../../api/CoreApi";
-import { ToastSuccess } from "../../../../../libs/Toast";
+import { ToastError, ToastSuccess } from "../../../../../libs/Toast";
 import { ModalComponent } from "../../../../../components/Modal";
 import { useState } from "react";
-import { fetchOrdenes, patchOrdenFallow } from "../../../../../store/Ordenes/Thunks";
+import {
+  fetchOrdenes,
+  patchOrdenFallow,
+} from "../../../../../store/Ordenes/Thunks";
 import { useNavigation } from "@react-navigation/native";
 
 export const ButtonConfirmInstalation = () => {
@@ -21,19 +24,25 @@ export const ButtonConfirmInstalation = () => {
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
   const { contrato } = useSelector((d: RootState) => d.contratoID);
+  const { ordenID } = useSelector((d: RootState) => d.ordenesId);
   const { idAllow } = useSelector((d: RootState) => d.ordenActive);
+  console.log(contrato);
+
   const finalizarOrden = () => {
+    
     dispatch(mostrarCargando());
     if (contrato) {
       coreApi
         .patch(
-          `/api/gsoft/installations/orders/${contrato.order_id}/?change_status=true`,
+          `/api/gsoft/installations/orders/${
+            contrato!.order_id
+          }/?change_status=true`,
           {
             status: 42,
           }
         )
         .then((result) => {
-          patchOrdenFallow(idAllow, {status:false}).then((d) => {});
+          patchOrdenFallow(idAllow, { status: false }).then((d) => {});
           setVisible(false);
           dispatch(ocultarCargando());
           ToastSuccess("Finalizado con éxito");
@@ -46,20 +55,29 @@ export const ButtonConfirmInstalation = () => {
             index: 0,
             routes: [{ name: "core" as never }],
           });
-          
         })
         .catch((err) => {
           dispatch(ocultarCargando());
-          
         });
     }
   };
+
+  const handleButton=()=>{
+    if (ordenID && ordenID.image_order.length == 0) {
+      return ToastError("Debe ingresar imágenes");
+    }
+
+    if (!contrato?.signe_base64) {
+      return ToastError("Debe ingresar la firma");
+    }
+    setVisible(true)
+  }
 
   return (
     <View style={tw`mt-5 pb-4`}>
       <Button
         mode="contained"
-        onPress={() => setVisible(true)}
+        onPress={handleButton}
         icon={() => (
           <FontAwesome6 name="check-circle" size={24} color="white" />
         )}

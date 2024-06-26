@@ -14,6 +14,8 @@ import { SuccessToast } from "react-native-toast-message";
 import { ToastError, ToastSuccess } from "../../../libs/Toast";
 import { theme } from "../../../../App";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { mostrarCargando, ocultarCargando } from "../../../store/splash/splashSlice";
+import { fetchIdOrden } from "../../../store/Ordenes/Thunks";
 
 export const ImageScreen = () => {
   const navigation = useNavigation();
@@ -48,7 +50,12 @@ export const ImageScreen = () => {
   };
 
   const handleNavigation = () => {
-    navigation.navigate("Imagen" as never);
+    if (contrato) {
+      dispatch(fetchIdOrden(contrato.order_id));
+      navigation.navigate("Imagen" as never);
+      dispatch(ocultarCargando());
+  
+    }
   };
 
   const saveImage = () => {
@@ -65,19 +72,17 @@ export const ImageScreen = () => {
         [extension]: [`data:image/jpeg;base64,${image64}`],
       },
     ];
-    return 
-
+    const payload = {data:[body]}
+    dispatch(mostrarCargando());
     coreApi
-      .post("/api/gsoft/installations/image/", body)
+      .post("/api/gsoft/installations/image/", payload)
       .then((result) => {
         ToastSuccess("Imagen guardar con éxito");
-        // setPorGuardar(false);
-        // dispatch(ocultarCargando());
-        // dispatch(fetchIdOrden(ordenID.id));
+        handleNavigation()
       })
       .catch((err) => {
+        dispatch(ocultarCargando());
         
-        // dispatch(ocultarCargando());
       });
   };
 

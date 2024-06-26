@@ -14,24 +14,28 @@ import { LoadingSpinner } from "../../../../components/LoadingSpinner";
 import { RefreshControl } from "react-native-gesture-handler";
 import { LoadingAbsolute } from "../../../../components/LoadingAbsolute";
 import { ButtonConfirmInstalation } from "./components/ButtonConfirmInstalation";
+import { fetchIdOrden } from "../../../../store/Ordenes/Thunks";
 
 export const UserClient = () => {
   const [refreshing, setRefreshing] = useState(false);
   const { contract } = useSelector((d: RootState) => d.ordenActive);
-  const { isLoading, } = useSelector((d: RootState) => d.contratoID);
-  
+  const { isLoading, contrato } = useSelector((d: RootState) => d.contratoID);
+
   const dispatch = useDispatch<AppDispatch>();
 
   const requestClient = () => {
-    
-    
     dispatch(fetchIdContratoId(contract));
   };
 
   useEffect(() => {
     requestClient();
   }, []);
-
+  
+  useEffect(() => {
+    if (contrato) {
+      dispatch(fetchIdOrden(contrato.order_id));
+    }
+  }, [contrato]);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -54,7 +58,7 @@ export const UserClient = () => {
         ]}
       >
         {isLoading ? (
-          <View style={[tw``,{flex:1}]}>
+          <View style={[tw``, { flex: 1 }]}>
             <LoadingSpinner />
           </View>
         ) : (
@@ -65,7 +69,7 @@ export const UserClient = () => {
             <View style={tw`h-60 bg-white mt-5 rounded-xl p-2`}>
               <MapClient />
             </View>
-            <ButtonConfirmInstalation/>
+            <ButtonConfirmInstalation />
           </>
         )}
       </View>

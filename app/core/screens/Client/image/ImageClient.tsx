@@ -5,6 +5,10 @@ import { useNavigation } from "@react-navigation/native";
 import tw from "twrnc";
 import { ScrollView } from "react-native-gesture-handler";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { AppDispatch, RootState } from "../../../../store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { fetchIdOrden } from "../../../../store/Ordenes/Thunks";
 
 const titles = [
   {
@@ -22,11 +26,25 @@ const titles = [
 ];
 
 export const ImageClient = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { contrato } = useSelector((d: RootState) => d.contratoID);
+  const { ordenID } = useSelector((d: RootState) => d.ordenesId);
+  const [imagesOrder, setImagesOrder] = useState<any>([]);
+
   const navigation = useNavigation<any>();
 
-  const handleMap = (title:string) => {
-    navigation.navigate("image", {title} );
+  const handleMap = (title: string) => {
+    navigation.navigate("image", { title });
   };
+
+  const handleRequest = () => {
+    if (contrato) {
+      dispatch(fetchIdOrden(contrato.order_id));
+    }
+  };
+  useEffect(() => {
+    handleRequest();
+  }, []);
 
   return (
     <ScrollView>
@@ -34,21 +52,37 @@ export const ImageClient = () => {
         style={[tw`px-2`, { flex: 1, backgroundColor: theme.colors.default }]}
       >
         <View style={styles.container}>
-          {titles.map((title) => (
-            <View
-            key={title.name}
-              style={[tw`bg-white rounded-xl shadow-md`, styles.imageContainer]}
-            >
-              <Text style={tw`text-center mb-2`}>{title.name}</Text>
-              <TouchableOpacity onPress={()=>handleMap(title.name)}>
-                <Image
-                  source={require("../../../../../assets/img/PLANTILLA_PROMOCION.png")}
-                  style={[tw`h-50 w-40 rounded-xl`, { alignSelf: "center" }]}
-                />
-              </TouchableOpacity>
-            </View>
-          ))}
+          {titles.map((title) => {
+            const filter = ordenID.image_order.find(
+              (d: any) => d.detail == title.name
+            );
 
+            
+            return (
+              <View
+                key={title.name}
+                style={[
+                  tw`bg-white rounded-xl shadow-md`,
+                  styles.imageContainer,
+                ]}
+              >
+                <Text style={tw`text-center mb-2`}>{title.name}</Text>
+                <TouchableOpacity onPress={() => handleMap(title.name)}>
+                  {!filter ? (
+                    <NoImage />
+                  ) : (
+                    <Image
+                      source={{ uri: filter.image }}
+                      style={[
+                        tw`h-50 w-40 rounded-xl`,
+                        { alignSelf: "center" },
+                      ]}
+                    />
+                  )}
+                </TouchableOpacity>
+              </View>
+            );
+          })}
           <View
             style={[
               tw`bg-white rounded-xl shadow-md`,
@@ -56,7 +90,7 @@ export const ImageClient = () => {
             ]}
           >
             <Text style={tw`text-center mb-2`}>Firma del cliente</Text>
-            <TouchableOpacity onPress={()=>handleMap('Firma')}>
+            <TouchableOpacity onPress={() => handleMap("Firma")}>
               {/* <Image
                 source={require("../../../../../assets/img/PLANTILLA_PROMOCION.png")}
                 style={[tw`h-80 w-80 rounded-xl`, { alignSelf: "center" }]}
