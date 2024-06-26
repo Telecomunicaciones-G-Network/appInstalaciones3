@@ -26,7 +26,7 @@ export const ButtonConfirmInstalation = () => {
   const { contrato } = useSelector((d: RootState) => d.contratoID);
   const { ordenID } = useSelector((d: RootState) => d.ordenesId);
   const { idAllow } = useSelector((d: RootState) => d.ordenActive);
-  console.log(contrato);
+  
 
   const finalizarOrden = () => {
     

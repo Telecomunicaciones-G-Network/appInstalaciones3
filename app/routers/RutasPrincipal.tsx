@@ -18,6 +18,7 @@ import { ImageScreen } from "../core/screens/image/ImageScreen";
 import { OptionScreen } from "../core/screens/options/OptionScreen";
 import { ModalComponent } from "../components/Modal";
 import { Button } from "react-native-paper";
+import { SigneScreen } from "../core/screens/signe/SigneScreen";
 
 const principal = createStackNavigator();
 
@@ -198,6 +199,9 @@ export const RutasPrincipal = () => {
         />
         <principal.Group screenOptions={{ presentation: "card" }}>
           <principal.Screen name="image" component={ImageScreen} />
+        </principal.Group>
+        <principal.Group screenOptions={{ presentation: "card" }}>
+          <principal.Screen name="signe" component={SigneScreen} />
         </principal.Group>
       </principal.Navigator>
       <ModalComponent

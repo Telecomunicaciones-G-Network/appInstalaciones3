@@ -36,6 +36,9 @@ export const ImageClient = () => {
   const handleMap = (title: string) => {
     navigation.navigate("image", { title });
   };
+  const handleSigne = () => {
+    navigation.navigate("signe");
+  };
 
   const handleRequest = () => {
     if (contrato) {
@@ -57,7 +60,6 @@ export const ImageClient = () => {
               (d: any) => d.detail == title.name
             );
 
-            
             return (
               <View
                 key={title.name}
@@ -90,7 +92,7 @@ export const ImageClient = () => {
             ]}
           >
             <Text style={tw`text-center mb-2`}>Firma del cliente</Text>
-            <TouchableOpacity onPress={() => handleMap("Firma")}>
+            <TouchableOpacity onPress={handleSigne}>
               {/* <Image
                 source={require("../../../../../assets/img/PLANTILLA_PROMOCION.png")}
                 style={[tw`h-80 w-80 rounded-xl`, { alignSelf: "center" }]}
