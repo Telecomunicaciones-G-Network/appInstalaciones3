@@ -8,6 +8,7 @@ import { CompletedScreen } from "../screens/completed/CompletedScreen";
 
 const Tab = createBottomTabNavigator();
 export const CoreRouters = () => {
+  
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
