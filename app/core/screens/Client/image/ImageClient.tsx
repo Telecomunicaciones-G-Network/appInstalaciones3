@@ -32,8 +32,8 @@ export const ImageClient = () => {
   const { ordenID } = useSelector((d: RootState) => d.ordenesId);
   const [refreshing, setRefreshing] = useState(false);
 
-  const [imagesOrder, setImagesOrder] = useState<any>([]);
-  console.log(contrato?.signe);
+  
+  
 
   const navigation = useNavigation<any>();
 

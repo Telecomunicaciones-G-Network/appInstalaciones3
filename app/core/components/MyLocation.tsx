@@ -1,6 +1,6 @@
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import React, { useEffect, useState } from "react";
-import { Text, View, Animated, Easing } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { Text, View, Animated, Easing, AppState } from "react-native";
 import * as Location from "expo-location";
 import tw from "twrnc";
 import { getLocation } from "../../libs/GetLocation";
@@ -8,12 +8,25 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { patchOrdenFallow } from "../../store/Ordenes/Thunks";
 import { useUser } from "../hooks/useUser";
+import * as BackgroundFetch from "expo-background-fetch";
 
 export const MyLocation = () => {
-  const {getUser} =useUser()
+  const appState = useRef(AppState.currentState);
+  const { getUser } = useUser();
   const { idAllow } = useSelector((d: RootState) => d.ordenActive);
   const [animation] = useState(new Animated.Value(1));
-  const [name, setName] = useState('')
+  const [name, setName] = useState("");
+
+  const getLocati = async () => {
+    const coords: any = await getLocation();
+    console.log(coords);
+
+    patchOrdenFallow(idAllow, {
+      coordinate: `${coords.latitude}, ${coords.longitude}`,
+      longitude: coords.longitude,
+      latitude: coords.latitude,
+    }).then((d) => {});
+  };
 
   useEffect(() => {
     const blinkingAnimation = Animated.loop(
@@ -41,25 +54,29 @@ export const MyLocation = () => {
     };
   }, [animation]);
 
-  const handleUser=async()=>{
-  const {name:nameUser}:any =  await getUser()
-    setName(nameUser)
-    
-  }
+  const handleUser = async () => {
+    const { name: nameUser }: any = await getUser();
+    setName(nameUser);
+  };
 
   useEffect(() => {
-    handleUser()
-    
+    handleUser();
+
     let interval;
     interval = setInterval(async () => {
-      const coords: any = await getLocation();
-      patchOrdenFallow(idAllow, {
-        coordinate: `${coords.latitude}, ${coords.longitude}`,
-        longitude: coords.longitude,
-        latitude: coords.latitude,
-      }).then((d) => {});
+      await getLocati();
     }, 120000);
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
+      getLocati();
+    });
+
+    return () => {
+      subscription.remove();
+    };
   }, []);
 
   return (
