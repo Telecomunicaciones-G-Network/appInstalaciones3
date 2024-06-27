@@ -3,7 +3,7 @@ import { theme } from "../../../../App";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../store/store";
 import { fetchOrdenes } from "../../../store/Ordenes/Thunks";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import tw from "twrnc";
 import { CardOrden } from "./components/CardOrden";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
@@ -12,12 +12,25 @@ import { OptionsOrden } from "./components/OptionsOrden";
 import { ButtonConfirmOrden } from "./components/ButtonConfirmOrden";
 import { DoesNotHaveOrders } from "./components/DoesNotHaveOrders";
 import { LoadingSpinner } from "../../../components/LoadingSpinner";
-import { ScrollView } from "react-native-gesture-handler";
+import { RefreshControl, ScrollView } from "react-native-gesture-handler";
 
 export const OrderScreen = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { ordenes, isLoading } = useSelector((d: RootState) => d.ordenes);
   const [orderID, setOrderID] = useState<any>(false);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      dispatch(
+        fetchOrdenes({
+          status: 41,
+        })
+      );
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   useEffect(() => {
     dispatch(
@@ -34,7 +47,12 @@ export const OrderScreen = () => {
     }
   }, [isLoading]);
   return (
-    <ScrollView style={{ flex: 1 }}>
+    <ScrollView
+      style={{ flex: 1 }}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <View
         style={[tw`px-2 `, { flex: 1, backgroundColor: theme.colors.default }]}
       >
