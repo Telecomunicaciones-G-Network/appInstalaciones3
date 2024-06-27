@@ -45,7 +45,7 @@ export const ButtonConfirmOrden = ({ order: { id, contract } }: Props) => {
 
   const handleConfirm = async () => {
     const coords = await getLocation();
-    const coordinate = `${coords?.latitude}, ${coords?.longitude}`;
+    const coordinate = `${coords?.latitude}, 0.22222222`;
     const body = {
       order: id,
       coordinate,
