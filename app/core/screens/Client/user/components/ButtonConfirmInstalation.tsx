@@ -26,38 +26,56 @@ export const ButtonConfirmInstalation = () => {
   const { contrato } = useSelector((d: RootState) => d.contratoID);
   const { ordenID } = useSelector((d: RootState) => d.ordenesId);
   const { idAllow } = useSelector((d: RootState) => d.ordenActive);
+  const { valid } = useSelector((d: RootState) => d.provisiningActive);
 
   const finalizarOrden = () => {
     dispatch(mostrarCargando());
     if (contrato) {
       coreApi
-        .patch(
-          `/api/gsoft/installations/orders/${
-            contrato!.order_id
-          }/?change_status=true`,
+        .post(
+          `/api/gsoft/installations/provisioning-contract/`,
           {
-            status: 42,
+            contract: contrato.id,
+            order: contrato!.order_id,
           }
         )
+        
         .then((result) => {
-          patchOrdenFallow(idAllow, { status: false }).then((d) => {});
-          setVisible(false);
           dispatch(ocultarCargando());
           ToastSuccess("Finalizado con éxito");
-          dispatch(
-            fetchOrdenes({
-              status: 41,
-            })
-          );
           navigation.reset({
             index: 0,
             routes: [{ name: "core" as never }],
           });
         })
         .catch((err) => {
+          setVisible(false )
+          ToastError("Fuera de rango, verifica que tenga buena señal");
           dispatch(ocultarCargando());
         });
     }
+  };
+
+  const handlePatch = () => {
+    patchOrdenFallow(idAllow, { status: false }).then((d) => {});
+    setVisible(false);
+    coreApi
+      .patch(`/api/gsoft/installations/orders/${contrato!.order_id}/`, {
+        status: 42,
+      })
+      .then((d) => {
+        dispatch(ocultarCargando());
+        ToastSuccess("Finalizado con éxito");
+        dispatch(
+          fetchOrdenes({
+            status: 41,
+          })
+        );
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "core" as never }],
+        });
+      });
   };
 
   const handleButton = () => {

@@ -20,8 +20,28 @@ export const fetchOpciones = createAsyncThunk(
       });
   }
 );
+export const fetchProvisioning = createAsyncThunk(
+  "fetchProvisioning",
+  async (params: any) => {
+    console.log(params);
+    
+    return coreApi
+      .get(`/api/gsoft/installations/provisioning-contract/`,{params})
+      .then(({data}) => {
+        console.log(data);
+        
+        return data
+      })
+      .catch((err) => {
+        console.log(err);
 
-export const patchOpciones = (id:any,body:any)=>{
-  return coreApi
-  .patch(`/api/gsoft/installations/orders/${id}/`, body)
-}
+        return inicialStateOpciones;
+      });
+  }
+);
+
+export const patchOpciones = (id: any, body: any) => {
+  return coreApi.patch(`/api/gsoft/installations/orders/${id}/`, body);
+};
+
+

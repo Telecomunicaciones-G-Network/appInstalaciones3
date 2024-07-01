@@ -8,6 +8,7 @@ import { contratoIdSlice } from "./contrato/contratoIdSlice";
 import { opcionesSLice } from "./instalacion/opcionesSlices";
 import { coreSlice } from "./core/coreSlice";
 import { ordenActiveSlice } from "./Ordenes/OrdenActiveSlice";
+import { provisioningSlice } from "./instalacion/provisioningSlices";
 
 export const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ export const store = configureStore({
     opciones:opcionesSLice.reducer,
     core:coreSlice.reducer,
     ordenActive:ordenActiveSlice.reducer,
+    provisiningActive:provisioningSlice.reducer,
   },
 });
 

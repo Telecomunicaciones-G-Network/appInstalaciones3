@@ -4,18 +4,29 @@ import { Text, View, Animated, Easing, AppState } from "react-native";
 import * as Location from "expo-location";
 import tw from "twrnc";
 import { getLocation } from "../../libs/GetLocation";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../store/store";
 import { patchOrdenFallow } from "../../store/Ordenes/Thunks";
 import { useUser } from "../hooks/useUser";
 import * as BackgroundFetch from "expo-background-fetch";
+import { fetchProvisioning } from "../../store/instalacion/Thunks";
 
 export const MyLocation = () => {
   const appState = useRef(AppState.currentState);
   const { getUser } = useUser();
   const { idAllow } = useSelector((d: RootState) => d.ordenActive);
+  const { contrato } = useSelector((d: RootState) => d.contratoID);
   const [animation] = useState(new Animated.Value(1));
   const [name, setName] = useState("");
+  const dispatch = useDispatch<AppDispatch>();
+
+  const getProvisioning = async () => {
+    dispatch(
+      fetchProvisioning({
+        contract: contrato ? contrato.id : 0,
+      })
+    );
+  };
 
   const getLocati = async () => {
     const coords: any = await getLocation();
@@ -60,12 +71,15 @@ export const MyLocation = () => {
   };
 
   useEffect(() => {
+    
+
     handleUser();
 
     let interval;
     interval = setInterval(async () => {
+      getProvisioning();
       await getLocati();
-    }, 120000);
+    }, 90000);
     return () => clearInterval(interval);
   }, []);
 
